@@ -17,7 +17,7 @@ intents.add(
 )
 
 const dcBot = new DiscordClient( { intents } )
-		, tgBot = new TelegramClient( TelegramToken )
+    , tgBot = new TelegramClient( TelegramToken )
 
 dcBot.login(DiscordToken).catch(e => {
   logger.error("\x1b[31m[Discord]\x1b[0m Error:", e)
@@ -33,24 +33,24 @@ dcBot.once("ready", () => {
 dcBot.commands = new DiscordCollection()
 
 tgBot.telegram.getMe().then(me => {
-	logger.success( `\x1b[36m[Telegram]\x1b[0m login as ${ me.first_name }${ me.last_name || '' }@${ me.username } (${ me.id })` );
+  logger.success( `\x1b[36m[Telegram]\x1b[0m login as ${ me.first_name }${ me.last_name || '' }@${ me.username } (${ me.id })` );
 }).catch(e => {
-	logger.error( '\x1b[36m[Telegram]\x1b[0m Telegraf.telegram.getMe() fail', e );
-	return null;
+  logger.error( '\x1b[36m[Telegram]\x1b[0m Telegraf.telegram.getMe() fail', e );
+  return null;
 })
 
 tgBot.launch().then(() => {
-	logger.success( '\x1b[36m[Telegram]\x1b[0m launch......' );
+  logger.success( '\x1b[36m[Telegram]\x1b[0m launch......' );
 }).catch(e => {
-	logger.error( '\x1b[36m[Telegram]\x1b[0m Error:', e );
+  logger.error( '\x1b[36m[Telegram]\x1b[0m Error:', e );
 });
 
 module.exports = {
-	dcBot,
-	tgBot,
-	chnList: {
+  dcBot,
+  tgBot,
+  chnList: {
     DCREV: config.DCREV,
-	  TGREV: config.TGREV,
+    TGREV: config.TGREV,
     // IRCCHN: config.IRCCHN
     DCMAIN: config.DCMAIN,
     TGMAIN: config.TGMAIN,

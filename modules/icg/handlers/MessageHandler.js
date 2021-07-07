@@ -16,63 +16,63 @@
 const EventEmitter = require( 'events' );
 
 class MessageHandler extends EventEmitter {
-	constructor() {
-		super();
+  constructor() {
+    super();
 
-		this._client = null;
-		this._type = 'unknown';
-		this._id = '?';
-		this._enabled = true;
-		this._started = false;
-		this._commands = new Map();
-	}
+    this._client = null;
+    this._type = 'unknown';
+    this._id = '?';
+    this._enabled = true;
+    this._started = false;
+    this._commands = new Map();
+  }
 
-	get rawClient() { return this._client; }
-	get type() { return this._type; }
-	set type( value ) { this._type = value; }
-	get id() { return this._id; }
-	set id( value ) { this._id = value; }
-	get enabled() { return this._enabled; }
-	set enabled( value ) { this._enabled = value && true; }
-	get started() { return this._started; }
+  get rawClient() { return this._client; }
+  get type() { return this._type; }
+  set type( value ) { this._type = value; }
+  get id() { return this._id; }
+  set id( value ) { this._id = value; }
+  get enabled() { return this._enabled; }
+  set enabled( value ) { this._enabled = value && true; }
+  get started() { return this._started; }
 
-	async say( target, message, options ) {
-		if ( this._enabled ) {
-			return;
-		} else {
-			throw new Error( 'Handler not enabled' );
-		}
-	}
+  async say( target, message, options ) {
+    if ( this._enabled ) {
+      return;
+    } else {
+      throw new Error( 'Handler not enabled' );
+    }
+  }
 
-	async reply( context, message, options ) {
-		return await this.say( context.from, message, options );
-	}
+  async reply( context, message, options ) {
+    return await this.say( context.from, message, options );
+  }
 
-	addCommand( command, func ) {
-		if ( ( !command ) || ( command.trim() === '' ) ) {
-			return this;
-		}
+  addCommand( command, func ) {
+    if ( ( !command ) || ( command.trim() === '' ) ) {
+      return this;
+    }
 
-		if ( typeof func === 'function' ) {
-			this._commands.set( command, func );
-		} else {
-			this._commands.set( command, true );
-		}
-		return this;
-	}
+    if ( typeof func === 'function' ) {
+      this._commands.set( command, func );
+    } else {
+      this._commands.set( command, true );
+    }
+    return this;
+  }
 
-	deleteCommand( command ) {
-		this._commands.delete( command );
-		return this;
-	}
+  deleteCommand( command ) {
+    this._commands.delete( command );
+    return this;
+  }
 
-	async start() {
-		this._started = true;
-	}
+  async start() {
+    this._started = true;
+  }
 
-	async stop() {
-		this._started = false;
-	}
+  async stop() {
+    this._started = false;
+  }
 }
 
 module.exports = MessageHandler;

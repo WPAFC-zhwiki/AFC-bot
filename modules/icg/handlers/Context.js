@@ -53,54 +53,54 @@
 let msgId = 0;
 
 const getMsgId = () => {
-	msgId++;
-	return msgId;
+  msgId++;
+  return msgId;
 };
 
 class Context {
-	constructor( options = {}, overrides = {} ) {
-		this.from = null;
-		this.to = null;
-		this.nick = '';
-		this.text = '';
-		this.isPrivate = null;
-		this.extra = {};
-		this.handler = null;
-		this._rawdata = null;
-		this.command = '';
-		this.param = '';
-		this._msgId = getMsgId();
+  constructor( options = {}, overrides = {} ) {
+    this.from = null;
+    this.to = null;
+    this.nick = '';
+    this.text = '';
+    this.isPrivate = null;
+    this.extra = {};
+    this.handler = null;
+    this._rawdata = null;
+    this.command = '';
+    this.param = '';
+    this._msgId = getMsgId();
 
-		// TODO 雖然這樣很醜陋，不過暫時先這樣了
-		for ( let k of [ 'from', 'to', 'nick', 'text', 'isPrivate', 'extra', 'handler', '_rawdata', 'command', 'param' ] ) {
-			if ( overrides[ k ] !== undefined ) {
-				this[ k ] = overrides[ k ];
-			} else if ( options[ k ] !== undefined ) {
-				this[ k ] = options[ k ];
-			}
-		}
+    // TODO 雖然這樣很醜陋，不過暫時先這樣了
+    for ( let k of [ 'from', 'to', 'nick', 'text', 'isPrivate', 'extra', 'handler', '_rawdata', 'command', 'param' ] ) {
+      if ( overrides[ k ] !== undefined ) {
+        this[ k ] = overrides[ k ];
+      } else if ( options[ k ] !== undefined ) {
+        this[ k ] = options[ k ];
+      }
+    }
 
-		if ( overrides.text !== undefined ) {
-			this.command = overrides.command || '';
-			this.param = overrides.param || '';
-		}
-	}
+    if ( overrides.text !== undefined ) {
+      this.command = overrides.command || '';
+      this.param = overrides.param || '';
+    }
+  }
 
-	say( target, message, options ) {
-		if ( this.handler ) {
-			this.handler.say( target, message, options );
-		}
-	}
+  say( target, message, options ) {
+    if ( this.handler ) {
+      this.handler.say( target, message, options );
+    }
+  }
 
-	reply( message, options ) {
-		if ( this.handler ) {
-			this.handler.reply( this, message, options );
-		}
-	}
+  reply( message, options ) {
+    if ( this.handler ) {
+      this.handler.reply( this, message, options );
+    }
+  }
 
-	get msgId() {
-		return this._msgId;
-	}
+  get msgId() {
+    return this._msgId;
+  }
 }
 
 module.exports = Context;
