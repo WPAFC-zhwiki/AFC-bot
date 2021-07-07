@@ -56,18 +56,5 @@ module.exports = {
 			tMsg,
 			dMsg
 		}, false );
-
-		if (issues && issues.length > 0) {
-      mwBot.edit("User:LuciferianThomas/AFC測試2", ({ content }) => {
-        return {
-          section: "new",
-          sectiontitle: `自動審閱[[:${title}]]頁面結果`,
-          text: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
-						issues.map(x => `${ issuesData[ x ].long }` ).join( '\n* ' )
-					}|botsig=--<span style="background:#ddd;padding:0.2em 0.75em;border:1px solid #999;border-radius:0.5em;">'''[[U:LuciferianBot|<span style="color:#000">路西法BOT</span>]]'''<sup>[[PJ:AFC|AFC]]</sup> • [[UT:LXFRNT|<span style="color:#000">留言</span>]]</span> ~~~~~}}`,
-					summary: `自動審閱[[:${title}]]頁面結果【此編輯為手動操作，是LuciferianThomas從[[PJ:AFC|AFC]]互聯群發出指令進行手動機械人測試】`
-        }
-      })
-    }
 	}
 };

@@ -57,6 +57,11 @@ const getReason = (page, $e = $("<div>")) => {
   return text.replace(/此條目/g, "草稿").replace(/\n/g, "").replace(/\r/g,"\n").replace(/\n• (?:$|\n)/g,"")
 }
 
+const allowBots = (text, user = "LuciferianBot") => {
+  if (!new RegExp("\\{\\{\\s*(nobots|bots[^}]*)\\s*\\}\\}", "i").test(text)) return true;
+  return (new RegExp("\\{\\{\\s*bots\\s*\\|\\s*deny\\s*=\\s*([^}]*,\\s*)*"+user+"\\s*(?=[,\\}])[^}]*\\s*\\}\\}", "i").test(text)) ? false : new RegExp("\\{\\{\\s*((?!nobots)|bots(\\s*\\|\\s*allow\\s*=\\s*((?!none)|([^}]*,\\s*)*"+user+"\\s*(?=[,\\}])[^}]*|all))?|bots\\s*\\|\\s*deny\\s*=\\s*(?!all)[^}]*|bots\\s*\\|\\s*optout=(?!all)[^}]*)\\s*\\}\\}", "i").test(text);
+}
+
 module.exports = {
 	name: 'watchlist',
 	fire: async (send) => {
@@ -206,6 +211,27 @@ module.exports = {
 				dMsg,
 				tMsg
 			});
+
+			return; // 未允許執行/自動化測試
+			if (mode == "submit") {
+        if (issues && issues.length > 0) {
+					let now = new Date()
+					let talkPage = new mwBot.page(`User talk:${user}`)
+					let tpWkt = await talkPage.text()
+					if (!allowBots(tpWkt)) return;
+
+					talkPage.edit(({ content }) => {
+						return {
+							section: "new",
+							sectiontitle: `您提交的草稿[[:${title}]]自動審閱結果（${now.getMonth()+1}月${now.getDate()}日）`,
+							text: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
+								issues.map(x => `${issuesData[x].long}`).join("\n* ")
+							}|botsig=--<span style="background:#ddd;padding:0.2em 0.75em;border:1px solid #999;border-radius:0.5em;">'''[[U:LuciferianBot|<span style="color:#000">路西法BOT</span>]]'''<sup>[[PJ:AFC|AFC]]</sup> • [[UT:LXFRNT|<span style="color:#000">留言</span>]]</span> ~~~~~}}`,
+							summary: `[[PJ:AFC|建立條目專題]]草稿[[:${title}]]自動審閱結果`,
+						}
+					})
+        }
+      }
 		};
 	}
 };
