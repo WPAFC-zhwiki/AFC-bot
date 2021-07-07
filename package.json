@@ -1,0 +1,38 @@
+{
+  "name": "zhwp-afc-bot",
+  "version": "2.1.2",
+  "description": "中文維基百科創建條目專題機械人",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WPAFC-zhwiki/AFC-bot.git"
+  },
+  "author": "LuciferianThomas & Sunny00217",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WPAFC-zhwiki/AFC-bot/issues"
+  },
+  "homepage": "https://github.com/WPAFC-zhwiki/AFC-bot#readme",
+  "dependencies": {
+    "cron": "^1.8.2",
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0",
+    "es6-shim": "^0.35.6",
+    "eventsource": "^1.1.0",
+    "fs": "0.0.1-security",
+    "jquery": "^3.6.0",
+    "js-yaml": "^4.1.0",
+    "jsdom": "^16.6.0",
+    "lru-cache": "^6.0.0",
+    "moment": "^2.29.1",
+    "mwn": "^0.11.1",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2",
+    "sharp": "^0.28.3",
+    "string-format": "^2.0.0",
+    "telegraf": "^4.4.0"
+  }
+}
