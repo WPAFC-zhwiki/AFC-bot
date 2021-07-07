@@ -111,7 +111,7 @@ module.exports = async (wikitext = '', $parseHTML = $()) => {
       return !!$(ele).html().match(/百家[号號]|baijiahao.baidu.com|bigexam.hk|boxun.com|bowenpress.com|hkgpao.com|peopo.org|qyer.com|speakout.hk|songshuhui.net|youtube.com|youtu.be|acfun.cn|bilibili.com/);
     })
   };
-  elements.cats = wikitext.match(/\[\[(?:[Cc]at|[Cc]ategory|分[类類]):/gi) || [];
+  elements.cats = wikitext.match(/\[\[:?(?:[Cc]at|[Cc]ategory|分[类類]):/gi) || [];
 
   let contentLen = countText.length - countText.match(/\p{L}/i) * 0.5;
   if (contentLen === 0) {
