@@ -212,11 +212,11 @@ module.exports = {
         tMsg
       });
 
-      return; // 未允許執行/自動化測試
       if (mode == "submit") {
         if (issues && issues.length > 0) {
           let now = new Date()
-          let talkPage = new mwBot.page(`User talk:${user}`)
+          // let talkPage = new mwBot.page(`User talk:${user}`)
+          let talkPage = new mwBot.page(`User:LuciferianThomas/AFC測試2`)
           let tpWkt = await talkPage.text()
           if (!allowBots(tpWkt)) return;
 
