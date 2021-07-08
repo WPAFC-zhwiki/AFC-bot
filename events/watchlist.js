@@ -18,7 +18,13 @@ const getReason = (page, $e = $("<div>")) => {
     $e.find(".mbox-image a").remove()
   }
   let $ambox = $e.find("table.ambox").clone()
-  let a = $e.find("a").clone()
+  $e = $(
+    $e.prop('outerHTML')
+      .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
+        return `[${p2}](${encodeURI(p1.replace(/([_*~\[\]\(\)])/g,"\\$1"))})"`
+      })
+      .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
+  )
   $e.find("table.ambox").remove()
   // logger.debug($ambox.prop('outerHTML'))
   let text = $e.text().trim() + ($ambox ? "\r• "+$ambox.find(".mbox-text-span").text().trim().split(/。/g).join("。\r• ") : "")
@@ -30,16 +36,6 @@ const getReason = (page, $e = $("<div>")) => {
       text = text.replace(
         eleText,
         `${eleText}\r• `
-      )
-    })
-  }
-  if (a) {
-    a.each((_i, ele) => {
-      let eleText = $(ele).text()
-      if (ele.href.startsWith("#")) ele.href = "/w" + encodeURI(title) + ele.href
-      text = text.replace(
-        eleText,
-        `[${eleText}](${ele.href.replace(/^\/w/, "https://zhwp.org/w")})`
       )
     })
   }
