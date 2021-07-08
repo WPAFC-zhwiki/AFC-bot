@@ -84,7 +84,7 @@ let getEmoji = (client, name) => {
 }
 
 let URL = (string) => {
-  return encodeURI(string)
+  return encodeURI(string)+(string[string.length-1] == ")" ? "_" : "")
 }
 
 module.exports = {
