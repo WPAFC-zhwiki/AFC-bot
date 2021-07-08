@@ -4,7 +4,7 @@ const EventSource = require( "eventsource" )
     , $ = require( process.cwd() + '/modules/jquery' )
     
 const logger = require( process.cwd() + '/modules/logger' )
-    , fn = require( process.cwd() + 'util/fn' )
+    , fn = require( process.cwd() + '/util/fn' )
 
 const { mwBot } = require(process.cwd() + '/util/bots.js')
     , autoprview = require(process.cwd() + '/modules/autoreview.js')
