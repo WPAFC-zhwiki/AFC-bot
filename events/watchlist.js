@@ -21,7 +21,7 @@ const getReason = (page, $e = $("<div>")) => {
   $e = $(
     $e.prop('outerHTML')
       .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
-        return `[${p2}](${encodeURI(p1.replace(/([_*~\[\]\(\)])/g,"\\$1"))})"`
+        return `[${p2}](${encodeURI(p1.replace(/([_*~\[\]\(\)])/g,"\\$1"))})`
       })
       .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
   )
