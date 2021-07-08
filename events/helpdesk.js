@@ -17,7 +17,7 @@ module.exports = {
         data.wiki !== "zhwiki" ||
         (
           data.title !== "WikiProject:建立條目/詢問桌"
-          && data.title !== "User:LuciferianThomas/AFC測試2"
+          // && data.title !== "User:LuciferianThomas/AFC測試2" // only for PJ:AFC/HD testing
         ) ||
         data.length.old >= data.length.new + 10
       ) {
