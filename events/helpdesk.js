@@ -4,6 +4,7 @@ const EventSource = require( "eventsource" )
     , $ = require( process.cwd() + '/modules/jquery' )
 
 const logger = require( process.cwd() + '/modules/logger' )
+    , fn = require( process.cwd() + '/util/fn' )
 
 const { mwBot } = require(process.cwd() + '/util/bots.js')
 
@@ -38,7 +39,7 @@ module.exports = {
       let parse = await mwBot.parseWikitext(diffText)
       parse = parse
         .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
-          return `[${p2}](${encodeURI(p1.replace(/([_*~\[\]\(\)])/g,"\\$1"))})`
+          return `[${p2}](${fn.URL(p1)})`
         })
         .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
       let $parse = $(parse)
@@ -50,7 +51,7 @@ module.exports = {
         .setTitle("詢問桌有新留言！")
         .setURL("https://zhwp.org/WikiProject:建立條目/詢問桌")
         .setDescription(
-          `留言者：[${data.user}](https://zhwp.org/User:${encodeURI(
+          `留言者：[${data.user}](https://zhwp.org/User:${fn.URL(
             data.user
           )})`
         )
@@ -60,7 +61,7 @@ module.exports = {
         )
       let tMsg =
         `[詢問桌有新留言！](https://zhwp.org/WikiProject:建立條目/詢問桌)\n` +
-        `留言者：[${data.user}](https://zhwp.org/User:${encodeURI(data.user)})\n` +
+        `留言者：[${data.user}](https://zhwp.org/User:${fn.URL(data.user)})\n` +
         `留言內容：\n` +
         (parseText.length > 2048 ? parseText.substring(0, 2045) + "..." : parseText)
       

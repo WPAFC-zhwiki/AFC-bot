@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
     , $ = require( "jquery" )( new ( require( "jsdom" ).JSDOM )().window )
+    , fn = require( process.cwd() + '/util/fn' )
 
 const { mwBot } = require( process.cwd() + '/util/bots.js' )
     , autoprview = require( process.cwd() + '/modules/autoreview' )
@@ -36,7 +37,7 @@ module.exports = {
 
     const { issues } = await autoprview( wikitext, $parseHTML );
 
-    let output = `系統剛剛自動審閱了[${ title }](https://zhwp.org/${ encodeURI( title.replace(/([_*~\[\]\(\)])/g,"\\$1") ) })頁面，初步`;
+    let output = `系統剛剛自動審閱了[${ title }](https://zhwp.org/${ fn.URL( title ) })頁面，初步`;
 
     if ( issues && issues.length > 0 ) {
       output += '發現可能存在以下問題：\n• ' + issues.map( ( x ) => `${ issuesData[ x ].short } (${ x })` ).join( '\n• ' );

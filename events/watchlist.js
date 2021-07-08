@@ -4,6 +4,7 @@ const EventSource = require( "eventsource" )
     , $ = require( process.cwd() + '/modules/jquery' )
     
 const logger = require( process.cwd() + '/modules/logger' )
+    , fn = require( process.cwd() + 'util/fn' )
 
 const { mwBot } = require(process.cwd() + '/util/bots.js')
     , autoprview = require(process.cwd() + '/modules/autoreview.js')
@@ -21,7 +22,7 @@ const getReason = (page, $e = $("<div>")) => {
   $e = $(
     $e.prop('outerHTML')
       .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
-        return `[${p2}](${encodeURI(p1.replace(/([_*~\[\]\(\)])/g,"\\$1"))})`
+        return `[${p2}](${fn.URL(p1)})`
       })
       .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
   )
@@ -87,7 +88,7 @@ module.exports = {
       // logger.log(page)
       let creator = await page.getCreator();
       await page.purge();
-      let output = `[${user}](https://zhwp.org/User:${encodeURI(user)})`;
+      let output = `[${user}](https://zhwp.org/User:${fn.URL(user)})`;
 
       let wikitext = await page.text();
       let html = await mwBot.parseWikitext(wikitext, {
@@ -101,7 +102,7 @@ module.exports = {
       logger.debug($submissionbox.length, page.namespace)
       if (!$submissionbox.length && page.namespace === 0) {
         mode = "accept"
-        output += `已接受[${creator}](https://zhwp.org/User:${encodeURI(creator)})的草稿[${title}](https://zhwp.org/${encodeURI(title)})`;
+        output += `已接受[${creator}](https://zhwp.org/User:${fn.URL(creator)})的草稿[${title}](https://zhwp.org/${fn.URL(title)})`;
         let tpClass;
         try {
           let talkPage = await mwBot.read(page.getTalkPage());
@@ -131,14 +132,14 @@ module.exports = {
         else output += `，未評級。`
       } else if (!$submissionbox.length && page.namespace !== 0) {
         mode = "remove"
-        output += `移除了[${creator}](https://zhwp.org/User:${encodeURI(creator)})的草稿[${title}](https://zhwp.org/${encodeURI(title)})的AFC模板。`;
+        output += `移除了[${creator}](https://zhwp.org/User:${fn.URL(creator)})的草稿[${title}](https://zhwp.org/${fn.URL(title)})的AFC模板。`;
       } else if ($submissionbox.hasClass('afc-submission-pending')) {
         mode = "submit"
         output += '提交了';
         if (creator !== user) {
-          output += `[${creator}](https://zhwp.org/User:${encodeURI(creator)})創建的`;
+          output += `[${creator}](https://zhwp.org/User:${fn.URL(creator)})創建的`;
         }
-        output += `草稿[${title}](https://zhwp.org/${encodeURI(title)})。`;
+        output += `草稿[${title}](https://zhwp.org/${fn.URL(title)})。`;
 
         issues = (await autoprview(wikitext, $parseHTML.children())).issues
       } else if (
@@ -148,11 +149,11 @@ module.exports = {
         output += '將';
         if (wikitext.match(/\|u=([^|]+)\|/)) {
           let submituser = wikitext.match(/\|u=([^|]+)\|/)[1];
-          output += `提交者[${submituser}](https://zhwp.org/User:${encodeURI(submituser)})所提交的`;
+          output += `提交者[${submituser}](https://zhwp.org/User:${fn.URL(submituser)})所提交的`;
         } else {
-          output += `建立者[${creator}](https://zhwp.org/User:${encodeURI(creator)})的`;
+          output += `建立者[${creator}](https://zhwp.org/User:${fn.URL(creator)})的`;
         }
-        output += `草稿[${title}](https://zhwp.org/${encodeURI(title)})標記為`;
+        output += `草稿[${title}](https://zhwp.org/${fn.URL(title)})標記為`;
         if ($submissionbox.hasClass('afc-submission-rejected')) {
           mode = "reject"
           output += '拒絕再次提交的草稿';
@@ -177,7 +178,7 @@ module.exports = {
         }
       }
 
-      if (output === `[${user}](https://zhwp.org/User:${encodeURI(user)})`) {
+      if (output === `[${user}](https://zhwp.org/User:${fn.URL(user)})`) {
         return;
       }
 

@@ -83,6 +83,10 @@ let getEmoji = (client, name) => {
   return client.emojis.cache.find(emoji => emoji.name.toLowerCase() == name.toLowerCase().replace(/ /g, "_"))
 }
 
+let URL = (string) => {
+  return encodeURI(string.replace(/([_*~\[\]\(\)])/g,"\\$1"))
+}
+
 module.exports = {
   time,
   utcTime,
@@ -99,4 +103,5 @@ module.exports = {
   clone: deepClone,
   sleep,
   wait: sleep,
+  URL
 };
