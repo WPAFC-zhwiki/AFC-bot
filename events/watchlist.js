@@ -214,21 +214,52 @@ module.exports = {
       if (mode == "submit") {
         if (issues && issues.length > 0) {
           let now = new Date()
-          // let talkPage = new mwBot.page(`User talk:${user}`)
-          let talkPage = new mwBot.page(`User:LuciferianThomas/AFC測試2`)
-          let tpWkt = await talkPage.text()
-          if (!allowBots(tpWkt)) return;
+          let { query: tpQuery } = await mwBot.request({
+            action: "query",
+            titles: `User talk:${user}`,
+            prop: "info"
+          })
 
-          talkPage.edit(({ content }) => {
-            return {
-              section: "new",
-              sectiontitle: `您提交的草稿[[:${title}]]自動審閱結果（${now.getMonth()+1}月${now.getDate()}日）`,
-              text: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
+          if (
+            Object.values(tpQuery.pages)[0].contentmodel == "wikitext"
+          ) {
+            // let talkPage = new mwBot.page(`User talk:${user}`)
+            let talkPage = new mwBot.page(`User:LuciferianThomas/AFC測試2`)
+            let tpWkt = await talkPage.text()
+            if (!allowBots(tpWkt)) return;
+
+            talkPage.edit(({ content }) => {
+              return {
+                section: "new",
+                sectiontitle: `您提交的草稿[[:${title}]]自動審閱結果（${now.getMonth()+1}月${now.getDate()}日）`,
+                text: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
+                  issues.map(x => `${issuesData[x].long}`).join("\n* ")
+                }|botsig=--<span style="background:#ddd;padding:0.2em 0.75em;border:1px solid #999;border-radius:0.5em;">'''[[U:LuciferianBot|<span style="color:#000">路西法BOT</span>]]'''<sup>[[PJ:AFC|AFC]]</sup> • [[UT:LXFRNT|<span style="color:#000">留言</span>]]</span> ~~~~~}}`,
+                summary: `[[PJ:AFC|建立條目專題]]草稿[[:${title}]]自動審閱結果`,
+              }
+            })
+          }
+          else {
+            let { query } = await mwBot.request({
+              action: "query",
+              format: "json",
+              meta: "tokens"
+            })
+            let flowToken = query.tokens.csrftoken
+            await mwBot.request({
+              action: "flow",
+              format: "json",
+              submodule: "new-topic",
+              // page: `User talk:${user}`,
+              page: `User talk:LuciferianThomas/AFC測試2`,
+              nttopic: `您提交的草稿[[:${title}]]自動審閱結果（${now.getMonth()+1}月${now.getDate()}日）`,
+              ntcontent: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
                 issues.map(x => `${issuesData[x].long}`).join("\n* ")
               }|botsig=--<span style="background:#ddd;padding:0.2em 0.75em;border:1px solid #999;border-radius:0.5em;">'''[[U:LuciferianBot|<span style="color:#000">路西法BOT</span>]]'''<sup>[[PJ:AFC|AFC]]</sup> • [[UT:LXFRNT|<span style="color:#000">留言</span>]]</span> ~~~~~}}`,
-              summary: `[[PJ:AFC|建立條目專題]]草稿[[:${title}]]自動審閱結果`,
-            }
-          })
+              ntformat: "wikitext",
+              token: flowToken,
+            })
+          }
         }
       }
     };
