@@ -26,7 +26,7 @@ function tgCommand( command ) {
         if ( iserror ) {
           ctx.reply( tMsg, {
             // eslint-disable-next-line camelcase
-            parse_mode: 'Markdown',
+            parse_mode: 'HTML',
             // eslint-disable-next-line camelcase
             reply_to_message_id: ctx.message
           } ).catch( function () {
@@ -37,7 +37,7 @@ function tgCommand( command ) {
 
         let m = await ctx.reply( tMsg, {
           // eslint-disable-next-line camelcase
-          parse_mode: 'Markdown',
+          parse_mode: 'HTML',
           // eslint-disable-next-line camelcase
           disable_web_page_preview: true
         } );
@@ -89,7 +89,7 @@ function dcCommand( command ) {
         if ( tgChn ) {
           tgBot.telegram.sendMessage( tgChn, tMsg, {
             // eslint-disable-next-line camelcase
-            parse_mode: 'Markdown',
+            parse_mode: 'HTML',
             // eslint-disable-next-line camelcase
             disable_web_page_preview: true
           } );

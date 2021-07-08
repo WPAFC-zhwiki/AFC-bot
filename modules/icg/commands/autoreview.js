@@ -51,11 +51,11 @@ module.exports = {
       .setDescription( output )
       .setTimestamp();
 
-    const tMsg = `*自動審閱系統*\n${ output }`;
+    const tMsg = `<b>自動審閱系統</b>\n${ output.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`) }`;
 
     reply( {
       tMsg,
       dMsg
-    }, false );
+    }, false);
   }
 };

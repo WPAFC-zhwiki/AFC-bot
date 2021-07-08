@@ -48,11 +48,11 @@ module.exports = async () => {
     ].join( ' **·** ' ) )
     .setTimestamp();
 
-  const tMsg = `*條目審核積壓*
-現時條目審核專題共有 *${ cnt }* 個積壓草稿需要審核，積壓 *${ lvl }* 週。
+  const tMsg = `<b>條目審核積壓</b>
+現時條目審核專題共有 <b>${ cnt }</b> 個積壓草稿需要審核，積壓 <b>${ lvl }</b> 週。
 ———
-*工具欄*
-[待審草稿](https://zhwp.org/Category:正在等待審核的草稿) · [隨機跳轉](https://zhwp.org/Special:RandomInCategory/Category:正在等待審核的草稿)`;
+<b>工具欄</b>
+<a href="https://zhwp.org/Category:正在等待審核的草稿">待審草稿</a> · <a href="https://zhwp.org/Special:RandomInCategory/Category:正在等待審核的草稿">隨機跳轉</a>`;
 
   return {
     cnt,

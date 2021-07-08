@@ -10,7 +10,7 @@
   "IRCMAIN": "#wikipedia-zh-afc",
   "IRCREV": "#wikipedia-zh-afc-reviewer",
   "tgMsgOptions": {
-    "parse_mode": "Markdown",
+    "parse_mode": "HTML",
     "disable_web_page_preview": true
   }
 }

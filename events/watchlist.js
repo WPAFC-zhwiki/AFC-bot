@@ -189,7 +189,7 @@ module.exports = {
           "自動檢測問題",
           `• ${issues.map(x => `${issuesData[x].short} (${x})`).join('\n• ')}`
         )
-        tMsg += '\n\n*自動檢測問題*\n• ' + issues.map((x) => `${issuesData[x].short} (${x})`).join('\n• ')
+        tMsg += '\n\n<b>自動檢測問題</b>\n• ' + issues.map((x) => `${issuesData[x].short} (${x})`).join('\n• ')
       }
       if (mode == "decline" || mode == "reject") {
         dMsg.addField(
@@ -204,6 +204,8 @@ module.exports = {
             : "，未提供拒絕理由。"
         )
       }
+
+      tMsg = tMsg.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`)
       send({
         dMsg,
         tMsg

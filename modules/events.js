@@ -9,7 +9,7 @@ function bindEvent( event ) {
     dcBot.channels.cache.get( chnList.DCREV ).send( dMsg );
     tgBot.telegram.sendMessage( chnList.TGREV , tMsg , {
       // eslint-disable-next-line camelcase
-      parse_mode: 'Markdown',
+      parse_mode: 'HTML',
       // eslint-disable-next-line camelcase
       disable_web_page_preview: true
     } );
