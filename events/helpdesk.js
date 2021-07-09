@@ -43,7 +43,7 @@ module.exports = {
       ).text()
       parse = parse
         .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
-          return `[${p2}](${fn.URL(p1)})`
+          return `[${p2}](${fn.eURIC(p1)})`
         })
         .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
       let $parse = $(parse)
@@ -54,7 +54,7 @@ module.exports = {
         .setTitle("詢問桌有新留言！")
         .setURL("https://zhwp.org/WikiProject:建立條目/詢問桌")
         .setDescription(
-          `留言者：[${data.user}](https://zhwp.org/User:${fn.URL(
+          `留言者：[${data.user}](https://zhwp.org/User:${fn.eURIC(
             data.user
           )})`
         )

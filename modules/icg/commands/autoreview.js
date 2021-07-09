@@ -27,7 +27,47 @@ module.exports = {
       dMsg: "計算中……"
     }, false );
     const title = args.join( ' ' );
-    const page = new mwBot.page( title );
+
+		/**
+		 * @type {import('mwn').MwnPage}
+		 */
+    let page;
+    try {
+      page = new mwBot.page( title );
+    } catch ( e ) {
+      return reply( {
+        tMsg: `標題<b><a href="https://zhwp.org/${ encodeURI(title )}">${title}</a></b>不合法或是頁面不存在。`,
+        dMsg: `標題**[${title}](https://zhwp.org/${ fn.eURIC(title) })**不合法或是頁面不存在。`
+      }, true )
+    }
+
+    let redirect = false
+      , rdrTgt = '', rdrFrom
+    try {
+      redirect = await page.isRedirect()
+      rdrTgt = await page.getRedirectTarget()
+    } catch ( e ) {
+      return reply( {
+        tMsg: `頁面<b><a href="https://zhwp.org/${ encodeURI(title) }">${title}</a></b>不存在。`,
+        dMsg: `頁面**[${title}](https://zhwp.org/${ fn.eURIC(title) })**不存在。`
+      }, true )
+    }
+
+    if ( redirect ) {
+      page = new mwBot.page( rdrTgt )
+      rdrFrom = `${title}`
+      title = `${rdrTgt}`
+    }
+
+		if ( [ 0, 2, 118 ].indexOf( page.namespace ) === -1 ) {
+      return reply( {
+        tMsg: `頁面<b><a href="https://zhwp.org/${ encodeURI(title) }">${title}</a></b>${rdrFrom ? `（重新導向自<a href="https://zhwp.org/${ encodeURI(rdrFrom) }">${rdrFrom}</a>）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。`,
+        dMsg: new Discord.MessageEmbed()
+          .setColor( 'YELLOW' )
+          .setDescription( `頁面**[${title}](https://zhwp.org/${ encodeURI(title) })**${rdrFrom ? `（重新導向自[${rdrFrom}](https://zhwp.org/${ encodeURI(rdrFrom) })）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。` )
+      } );
+		}
+
     const wikitext = await page.text();
     const html = await mwBot.parseWikitext( wikitext, {
       title: title,
@@ -37,7 +77,7 @@ module.exports = {
 
     const { issues } = await autoprview( wikitext, $parseHTML );
 
-    let output = `系統剛剛自動審閱了[${ title }](https://zhwp.org/${ fn.URL( title ) })頁面，初步`;
+    let output = `系統剛剛自動審閱了<b>[${ title }](https://zhwp.org/${ fn.eURIC( title ) })</b>頁面${rdrFrom ? `（重新導向自[${rdrFrom}](https://zhwp.org/${ encodeURI(rdrFrom) })）` : ""}，初步`;
 
     if ( issues && issues.length > 0 ) {
       output += '發現可能存在以下問題：\n• ' + issues.map( ( x ) => `${ issuesData[ x ].short } (${ x })` ).join( '\n• ' );
@@ -48,7 +88,7 @@ module.exports = {
     const dMsg = new Discord.MessageEmbed()
       .setColor( issues && issues.length ? 'RED' : 'GREEN' )
       .setTitle( '自動審閱系統' )
-      .setDescription( output )
+      .setDescription( output.replace(/<b>(.*?)<\/b>/g, "**$1**") )
       .setTimestamp();
 
     const tMsg = `<b>自動審閱系統</b>\n${ output.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`) }`;
