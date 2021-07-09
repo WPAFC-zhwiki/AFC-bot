@@ -4,10 +4,11 @@ const { Telegraf: TelegramClient } = require('telegraf')
       Intents: DiscordIntents,
       Collection: DiscordCollection
     } = require('discord.js')
-    , { DiscordToken, TelegramToken, WikiToken } = require('./credentials')
+    , { DiscordToken, TelegramToken, IRCPassword } = require('./credentials')
     , config = require('./config.json')
     , logger = require(process.cwd() + '/modules/logger.js')
     , { mwn } = require("mwn")
+    , irc = require( 'irc-upd' );
 
 const intents = new DiscordIntents();
 intents.add(
@@ -45,15 +46,36 @@ tgBot.launch().then(() => {
   logger.error( '\x1b[36m[Telegram]\x1b[0m Error:', e );
 });
 
+const ircBot = new irc.Client( "irc.libera.chat", "zhwp-afc-bot", {
+  userName: "zhwp-afc-bot",
+  realName: "zhwp-afc-bot",
+  port: "6666",
+  autoRejoin: true,
+  channels: ["#wikipedia-zh-afc", "#wikipedia-zh-afc-reviewer"],
+  secure: false,
+  floodProtection: true,
+  floodProtectionDelay: 300,
+  sasl: true,
+  password: IRCPassword,
+  encoding: 'UTF-8',
+  autoConnect: false,
+} );
+
+ircBot.connect(() => {
+  logger.success( `\x1b[92m[IRC]\x1b[0m login as ${ircBot.opt.userName}` );
+})
+
 module.exports = {
   dcBot,
   tgBot,
+  ircBot,
   chnList: {
     DCREV: config.DCREV,
     TGREV: config.TGREV,
-    // IRCCHN: config.IRCCHN
     DCMAIN: config.DCMAIN,
     TGMAIN: config.TGMAIN,
+    IRCMAIN: config.IRCMAIN,
+    IRCREV: config.IRCREV
   },
 };
 

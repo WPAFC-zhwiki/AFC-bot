@@ -9,11 +9,12 @@ module.exports = {
    * @type {import('../modules/command').run}
    */
   run: async ( _client, _args, reply ) => {
-    const { tMsg, dMsg } = await getBacklogInfo();
+    const { tMsg, dMsg, iMsg } = await getBacklogInfo();
 
     reply( {
       tMsg,
-      dMsg
+      dMsg,
+      iMsg
     } );
   }
 };

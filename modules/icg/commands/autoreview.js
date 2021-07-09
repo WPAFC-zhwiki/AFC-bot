@@ -6,6 +6,8 @@ const { mwBot } = require( process.cwd() + '/util/bots.js' )
     , autoprview = require( process.cwd() + '/modules/autoreview' )
     , issuesData = require( process.cwd() + '/modules/issuedata.json' );
 
+let { iB } = fn
+
 module.exports = {
   name: 'autoreview',
   usage: 'autoreview',
@@ -18,13 +20,15 @@ module.exports = {
     if ( !args.length ) {
       reply( {
         tMsg: '請輸入頁面名稱！',
-        dMsg: '請輸入頁面名稱！'
+        dMsg: '請輸入頁面名稱！',
+        iMsg: '請輸入頁面名稱！'
       }, true );
       return;
     }
     reply( {
       tMsg: "計算中……",
-      dMsg: "計算中……"
+      dMsg: "計算中……",
+      iMsg: "計算中……"
     }, false );
     let title = args.join( ' ' );
 
@@ -37,7 +41,8 @@ module.exports = {
     } catch ( e ) {
       return reply( {
         tMsg: `標題<b><a href="https://zhwp.org/${ encodeURI(title )}">${title}</a></b>不合法或是頁面不存在。`,
-        dMsg: `標題**[${title}](https://zhwp.org/${ fn.eURIC(title) })**不合法或是頁面不存在。`
+        dMsg: `標題**[${title}](https://zhwp.org/${ fn.eURIC(title) })**不合法或是頁面不存在。`,
+        iMsg: `標題 ${title} <https://zhwp.org/${ fn.eURIC(title) }> 不合法或是頁面不存在。`
       }, true )
     }
 
@@ -49,7 +54,8 @@ module.exports = {
     } catch ( e ) {
       return reply( {
         tMsg: `頁面<b><a href="https://zhwp.org/${ encodeURI(title) }">${title}</a></b>不存在。`,
-        dMsg: `頁面**[${title}](https://zhwp.org/${ fn.eURIC(title) })**不存在。`
+        dMsg: `頁面**[${title}](https://zhwp.org/${ fn.eURIC(title) })**不存在。`,
+        iMsg: `頁面 ${title} <https://zhwp.org/${ fn.eURIC(title) }> 不存在。`
       }, true )
     }
 
@@ -64,7 +70,8 @@ module.exports = {
         tMsg: `頁面<b><a href="https://zhwp.org/${ encodeURI(title) }">${title}</a></b>${rdrFrom ? `（重新導向自<a href="https://zhwp.org/${ encodeURI(rdrFrom) }">${rdrFrom}</a>）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。`,
         dMsg: new Discord.MessageEmbed()
           .setColor( 'YELLOW' )
-          .setDescription( `頁面**[${title}](https://zhwp.org/${ encodeURI(title) })**${rdrFrom ? `（重新導向自[${rdrFrom}](https://zhwp.org/${ encodeURI(rdrFrom) })）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。` )
+          .setDescription( `頁面**[${title}](https://zhwp.org/${ encodeURI(title) })**${rdrFrom ? `（重新導向自[${rdrFrom}](https://zhwp.org/${ encodeURI(rdrFrom) })）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。` ),
+        iMsg: `頁面 ${title} <https://zhwp.org/${ encodeURI(title) }> ${rdrFrom ? `（重新導向自 ${rdrFrom} <https://zhwp.org/${ encodeURI(rdrFrom) }> ）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。`
       } );
     }
 
@@ -91,11 +98,18 @@ module.exports = {
       .setDescription( output.replace(/<b>(.*?)<\/b>/g, "**$1**") )
       .setTimestamp();
 
-    const tMsg = `<b>自動審閱系統</b>\n${ output.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`) }`;
+    const tMsg = `<b>自動審閱系統</b>\n${
+      output.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`)
+    }`;
+    const iMsg = `${iB}自動審閱系統${iB}\n${
+      output.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, ` $1 <$2> `)
+        .replace(/<b>(.*?)<\/b>/g, `${iB}$1${iB}`)
+    }`;
 
     reply( {
       tMsg,
-      dMsg
+      dMsg,
+      iMsg
     }, false);
 
     /** ONLY FOR TESTING

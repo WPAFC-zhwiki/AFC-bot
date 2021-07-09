@@ -6,7 +6,8 @@ const MessageHandler = require( './MessageHandler.js' );
 const Context = require( './Context.js' );
 const color = require( 'irc-colors' );
 const irc = require( 'irc-upd' );
-const winston = require( 'winston' );
+
+const logger = require(process.cwd() + '/modules/logger')
 
 class IRCMessageHandler extends MessageHandler {
   constructor( config = {} ) {
@@ -15,33 +16,20 @@ class IRCMessageHandler extends MessageHandler {
     // 加载机器人
     let botConfig = config.bot;
     let ircOptions = config.options || {};
-    const client = new irc.Client( botConfig.server, botConfig.nick, {
-      userName: botConfig.userName,
-      realName: botConfig.realName,
-      port: botConfig.port,
-      autoRejoin: true,
-      channels: botConfig.channels || [],
-      secure: botConfig.secure || false,
-      floodProtection: botConfig.floodProtection || true,
-      floodProtectionDelay: botConfig.floodProtectionDelay || 300,
-      sasl: botConfig.sasl,
-      password: botConfig.sasl_password,
-      encoding: botConfig.encoding || 'UTF-8',
-      autoConnect: false
-    } );
+    const client = require( process.cwd() + '/util/bots.js' ).ircBot;
 
     client.on( 'registered', ( message ) => {
-      winston.info( 'IRCBot has been registered.' );
+      logger.info( 'IRCBot has been registered.' );
     } );
 
     client.on( 'join', ( channel, nick, message ) => {
       if ( nick === client.nick ) {
-        winston.info( `IRCBot has joined channel: ${ channel } as ${ nick }` );
+        logger.info( `IRCBot has joined channel: ${ channel } as ${ nick }` );
       }
     } );
 
     client.on( 'error', ( message ) => {
-      winston.error( `IRCBot error: ${ message.command } (${ ( message.args || [] ).join( ' ' ) })` );
+      logger.error( `IRCBot error: ${ message.command } (${ ( message.args || [] ).join( ' ' ) })` );
     } );
 
     // 加载设置

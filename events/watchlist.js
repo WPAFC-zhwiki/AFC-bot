@@ -6,6 +6,8 @@ const EventSource = require( "eventsource" )
 const logger = require( process.cwd() + '/modules/logger' )
     , fn = require( process.cwd() + '/util/fn' )
 
+const { iB } = fn
+
 const { mwBot } = require(process.cwd() + '/util/bots.js')
     , autoprview = require(process.cwd() + '/modules/autoreview.js')
     , issuesData = require(process.cwd() + '/modules/issuedata.json')
@@ -205,10 +207,13 @@ module.exports = {
         )
       }
 
+      let iMsg = tMsg.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, ` $1 <$2> `)
+        .replace(/<b>(.*?)<\/b>/g, `${iB}$1${iB}`)
       tMsg = tMsg.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`)
       send({
         dMsg,
-        tMsg
+        tMsg,
+        iMsg
       });
 
       if (mode == "submit") {

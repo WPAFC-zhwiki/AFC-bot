@@ -87,6 +87,8 @@ let eURIC = (string) => {
   return encodeURIComponent(string)
 }
 
+let iB = String.fromCharCode(0x02)
+
 module.exports = {
   time,
   utcTime,
@@ -103,5 +105,6 @@ module.exports = {
   clone: deepClone,
   sleep,
   wait: sleep,
-  eURIC
+  eURIC,
+  iB
 };

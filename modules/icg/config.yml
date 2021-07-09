@@ -5,7 +5,7 @@
 #
 
 IRC:
-  disabled: true                            # 如果需要 IRC 机器人，请设置为 false
+  disabled: false                            # 如果需要 IRC 机器人，请设置为 false
   bot:
     server: irc.libera.chat
     nick: ""                                # IRC 暱稱
@@ -119,10 +119,10 @@ transport:
   #    discord/ID 例如 discord/123123123123
   # 3. 如果需要，可以加入多個互聯體。例如将两个 QQ 分群连接到一起。
   groups:
-    - ['telegram/-1001320626590', 'discord/852563544619745280']
-    #- ['irc/#wikipedia-zh-afc', 'telegram/-1001320626590', 'discord/852563544619745280']
-    - ['telegram/-1001391997174', 'discord/852564292393238558']
-    #- ['irc/#wikipedia-zh-afc-reviewer', 'telegram/-1001391997174', 'discord/852564292393238558']
+    # - ['telegram/-1001320626590', 'discord/852563544619745280']
+    - ['irc/#wikipedia-zh-afc', 'telegram/-1001320626590', 'discord/852563544619745280']
+    # - ['telegram/-1001391997174', 'discord/852564292393238558']
+    - ['irc/#wikipedia-zh-afc-reviewer', 'telegram/-1001391997174', 'discord/852564292393238558']
     # 可以在同一组内增加软件相同、群号不同的群，例如
     # - ['irc/#test', 'telegram/-12345678', 'qq/12345678', 'qq/87654321']
     # 另外如有多组互联需求，可继续增加互联关系
@@ -135,7 +135,7 @@ transport:
 
   # 如果需要设置单向转发/不转发，例如 Telegram 群不向 QQ 转发，请在下面设置
   disables:
-    "telegram/-12345678": ["qq/12345678"]
+    # "telegram/-12345678": ["qq/12345678"]
 
   options:
     IRC:

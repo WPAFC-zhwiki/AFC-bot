@@ -108,7 +108,3 @@ for ( const file of commandFiles ) {
   const command = require( process.cwd() + `/modules/icg/commands/${ file }` );
   bindCommand( command );
 }
-
-dcBot.on('message', async (message) => {
-
-})

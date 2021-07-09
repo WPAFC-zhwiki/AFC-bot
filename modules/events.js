@@ -1,11 +1,11 @@
 const fs = require('fs')
-const { dcBot, tgBot, chnList } = require( process.cwd() + '/util/bots' );
+const { dcBot, tgBot, ircBot, chnList } = require( process.cwd() + '/util/bots' );
 
 const logger = require(process.cwd() + '/modules/logger')
 
 function bindEvent( event ) {
   logger.info( `\x1b[33m[EVT]\x1b[0m Loading ${ event.name }` );
-  event.fire( function ( { tMsg, dMsg } ) {
+  event.fire( function ( { tMsg, dMsg, iMsg } ) {
     dcBot.channels.cache.get( chnList.DCREV ).send( dMsg );
     tgBot.telegram.sendMessage( chnList.TGREV , tMsg , {
       // eslint-disable-next-line camelcase
@@ -13,6 +13,7 @@ function bindEvent( event ) {
       // eslint-disable-next-line camelcase
       disable_web_page_preview: true
     } );
+    ircBot.say( chnList.IRCREV , iMsg );
   } );
 }
 

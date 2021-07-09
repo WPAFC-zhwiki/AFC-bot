@@ -8,11 +8,12 @@ module.exports = {
   fire: async ( send ) => {
     let backlogNotif = new CronJob( '0 0 */4 * * *', async () => {
       try {
-        const { tMsg, dMsg } = await getBacklogInfo();
+        const { tMsg, dMsg, iMsg } = await getBacklogInfo();
 
         send( {
           tMsg,
-          dMsg
+          dMsg,
+          iMsg
         } );
 
       } catch ( err ) {

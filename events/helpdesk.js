@@ -6,6 +6,8 @@ const EventSource = require( "eventsource" )
 const logger = require( process.cwd() + '/modules/logger' )
     , fn = require( process.cwd() + '/util/fn' )
 
+const { iB } = fn
+
 const { mwBot } = require(process.cwd() + '/util/bots.js')
 
 module.exports = {
@@ -48,6 +50,7 @@ module.exports = {
         .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
       let $parse = $(parse)
       let parseText = $parse.text()
+      let parseIRC = parseText.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, ` $1 <$2> `)
 
       let dMsg = new DiscordMessageEmbed()
         .setColor("BLUE")
@@ -68,9 +71,16 @@ module.exports = {
         `留言內容：\n` +
         (parseTG.length > 2048 ? parseTG.substring(0, 2045) + "..." : parseTG)
       
+      let iMsg =
+      `${iB}詢問桌有新留言！${iB} <https://zhwp.org/WikiProject:建立條目/詢問桌>\n` +
+      `留言者：${data.user} <https://zhwp.org/User:${data.user}>\n` +
+      `留言內容：\n` +
+      (parseText.length > 2048 ? parseText.substring(0, 2045) + "..." : parseText)
+      
       send({
         dMsg,
         tMsg,
+        iMsg
       })
     }
   },

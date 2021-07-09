@@ -5,6 +5,8 @@ const config = require( process.cwd() + '/util/config.json' )
 
 const getBacklogInfo = require( process.cwd() + '/modules/backlogInfo.js' );
 
+let { iB } = fn
+
 module.exports = {
 	name: 'waitlist',
 	usage: 'waitlist',
@@ -54,9 +56,18 @@ module.exports = {
       ).slice( s, i + 1 ).join( '' ) +
 			`顯示第 ${ s + 1 } 至 ${ i + 1 } 項（共 ${ list.length } 項）`;
 
+		const iMsg = `${iB}候審草稿列表${iB}\n` + 
+		list.map( page => 
+			`${page.title} <https://zhwp.org/${
+				page.title.replace( / /g, '_' )
+			}>\n`
+		).slice( s, i + 1 ).join( '' ) +
+		`顯示第 ${ s + 1 } 至 ${ i + 1 } 項（共 ${ list.length } 項）`;
+
 		reply( {
 			tMsg,
-			dMsg
+			dMsg,
+			iMsg
 		} );
 	}
 };
