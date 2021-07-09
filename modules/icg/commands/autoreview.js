@@ -26,11 +26,11 @@ module.exports = {
       tMsg: "計算中……",
       dMsg: "計算中……"
     }, false );
-    const title = args.join( ' ' );
+    let title = args.join( ' ' );
 
-		/**
-		 * @type {import('mwn').MwnPage}
-		 */
+    /**
+     * @type {import('mwn').MwnPage}
+     */
     let page;
     try {
       page = new mwBot.page( title );
@@ -59,14 +59,14 @@ module.exports = {
       title = `${rdrTgt}`
     }
 
-		if ( [ 0, 2, 118 ].indexOf( page.namespace ) === -1 ) {
+    if ( [ 0, 2, 118 ].indexOf( page.namespace ) === -1 ) {
       return reply( {
         tMsg: `頁面<b><a href="https://zhwp.org/${ encodeURI(title) }">${title}</a></b>${rdrFrom ? `（重新導向自<a href="https://zhwp.org/${ encodeURI(rdrFrom) }">${rdrFrom}</a>）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。`,
         dMsg: new Discord.MessageEmbed()
           .setColor( 'YELLOW' )
           .setDescription( `頁面**[${title}](https://zhwp.org/${ encodeURI(title) })**${rdrFrom ? `（重新導向自[${rdrFrom}](https://zhwp.org/${ encodeURI(rdrFrom) })）` : ""}不在條目命名空間、使用者命名空間或草稿命名空間，不予解析。` )
       } );
-		}
+    }
 
     const wikitext = await page.text();
     const html = await mwBot.parseWikitext( wikitext, {
