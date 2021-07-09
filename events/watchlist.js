@@ -20,14 +20,16 @@ const getReason = (page, $e = $("<div>")) => {
   if ($e.find(".mbox-image a").length) {
     $e.find(".mbox-image a").remove()
   }
-  let $ambox = $e.find("table.ambox").clone()
+  console.log($e.prop('outerHTML'))
   $e = $(
     $e.prop('outerHTML')
       .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
-        return `[${p2}](${fn.eURIC(p1)})`
+        return `[${p2}](${p1})`
       })
       .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
   )
+  console.log($e.prop('outerHTML'))
+  let $ambox = $e.find("table.ambox").clone()
   $e.find("table.ambox").remove()
   // logger.debug($ambox.prop('outerHTML'))
   let text = $e.text().trim() + ($ambox ? "\r• "+$ambox.find(".mbox-text-span").text().trim().split(/。/g).join("。\r• ") : "")
@@ -194,6 +196,7 @@ module.exports = {
         tMsg += '\n\n<b>自動檢測問題</b>\n• ' + issues.map((x) => `${issuesData[x].short} (${x})`).join('\n• ')
       }
       if (mode == "decline" || mode == "reject") {
+        console.log(reasons)
         dMsg.addField(
           "拒絕理由",
           reasons.length 
@@ -210,6 +213,7 @@ module.exports = {
       let iMsg = tMsg.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, ` $1 <$2> `)
         .replace(/<b>(.*?)<\/b>/g, `${iB}$1${iB}`)
       tMsg = tMsg.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, `<a href="$2">$1</a>`)
+      console.log(tMsg)
       send({
         dMsg,
         tMsg,
