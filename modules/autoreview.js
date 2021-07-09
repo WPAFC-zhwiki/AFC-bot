@@ -135,7 +135,7 @@ module.exports = async (wikitext = '', $parseHTML = $()) => {
     issues.push('unreferenced');
   }
   else {
-    if ($('<div>').append(elements.refs.$references).length < Math.ceil(contentLen / 300)+0.1) {
+    if ($('<div>').append(elements.refs.$references).length < Math.min(Math.ceil(contentLen / 300)+0.1,20)) {
       issues.push('ref-improve');
     }
 

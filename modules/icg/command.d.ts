@@ -25,5 +25,6 @@ export type command = {
 
 export function dcCommand( command: command ): void;
 export function tgCommand( command: command ): void;
+export function ircCommand( command: command ): void;
 
 export function bindCommand( command: command ): void;

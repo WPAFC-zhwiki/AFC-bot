@@ -6,8 +6,9 @@ const $ = require( process.cwd() + '/modules/jquery.js' )
 const { iB } = require( process.cwd() + '/util/fn' )
 
 module.exports = async () => {
-  let list = await new mwBot.category( 'Category:正在等待審核的草稿' ).members();
-  list = list.filter( ( x ) => x.title !== 'Category:正在等待审核的用户页草稿' );
+  let list = await new mwBot.category( 'Category:正在等待審核的草稿' ).members({
+    cmtype: "page"
+  });
   const cnt = list.length;
   const html = await mwBot.parseTitle( 'Template:AFC_status/level' );
   const $rawLvl = $( $.parseHTML( html ) );
@@ -42,7 +43,7 @@ module.exports = async () => {
     }() )
     .setTitle( '條目審核積壓' )
     .setDescription(
-      `現時條目審核專題共有 **${ cnt }** 個積壓草稿需要審核，積壓 **${ lvl }** 週。`
+      `現時條目審核專題共有 **${ cnt }** 個積壓草稿需要審核，積壓 **~${ lvl }** 週。`
     )
     .addField( '工具欄', [
       '[待審草稿](https://zhwp.org/Category:正在等待審核的草稿)',
@@ -51,13 +52,13 @@ module.exports = async () => {
     .setTimestamp();
 
   const tMsg = `<b>條目審核積壓</b>
-現時條目審核專題共有 <b>${ cnt }</b> 個積壓草稿需要審核，積壓 <b>${ lvl }</b> 週。
+現時條目審核專題共有 <b>${ cnt }</b> 個積壓草稿需要審核，積壓 <b>~${ lvl }</b> 週。
 ———
 <b>工具欄</b>
 <a href="https://zhwp.org/Category:正在等待審核的草稿">待審草稿</a> · <a href="https://zhwp.org/Special:RandomInCategory/Category:正在等待審核的草稿">隨機跳轉</a>`;
 
   const iMsg = `${iB}條目審核積壓${iB}
-現時條目審核專題共有 ${iB}${ cnt }${iB} 個積壓草稿需要審核，積壓 ${iB}${ lvl }${iB} 週。
+現時條目審核專題共有 ${iB}${ cnt }${iB} 個積壓草稿需要審核，積壓 ${iB}~${ lvl }${iB} 週。
 ———
 ${iB}工具欄${iB}
 待審草稿 <https://zhwp.org/Category:正在等待審核的草稿>\n隨機跳轉 <https://zhwp.org/Special:RandomInCategory/Category:正在等待審核的草稿>`;
