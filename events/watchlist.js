@@ -1,6 +1,4 @@
-const EventSource = require( "eventsource" )
-    , RTRC = new EventSource( "https://stream.wikimedia.org/v2/stream/recentchange" )
-    , { MessageEmbed: DiscordMessageEmbed } = require( "discord.js" )
+const { MessageEmbed: DiscordMessageEmbed } = require( "discord.js" )
     , $ = require( process.cwd() + '/modules/jquery' )
     
 const logger = require( process.cwd() + '/modules/logger' )
@@ -66,16 +64,16 @@ const allowBots = (text, user = "LuciferianBot") => {
 module.exports = {
   name: 'watchlist',
   fire: async (send) => {
-    RTRC.onmessage = async function (event) {
-      const data = JSON.parse(event.data);
-      if (
-        data.wiki !== 'zhwiki' ||
-        data.type !== 'categorize' ||
-        data.title !== 'Category:正在等待審核的草稿'
-      ) {
-        return;
-      }
-
+    await mwBot.loggedIn;
+    let stream = new mwBot.stream( "recentchange" );
+    // console.log(stream)
+    stream.addListener((data) => {
+      return (
+        data.wiki === 'zhwiki'
+        && data.type === 'categorize'
+        && data.title === 'Category:正在等待審核的草稿'
+      )
+    }, async (data) => {
       logger.log(data.user, data.comment);
 
       const title = data.comment.replace(/^\[\[:?([^[\]]+)\]\].*$/, '$1');
@@ -271,6 +269,6 @@ module.exports = {
           }
         }
       }
-    };
+    })
   }
 };

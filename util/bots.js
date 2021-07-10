@@ -88,10 +88,12 @@ module.exports = {
     }
   });
   const mwBot = new mwn(optin.mwn);
+  let loggedIn
   if (optin.mwn.OAuthCredentials) {
-    mwBot.getTokensAndSiteInfo();
+    loggedIn = mwBot.getTokensAndSiteInfo();
   } else {
-    mwBot.login();
+    loggedIn = mwBot.login();
   }
   module.exports.mwBot = mwBot;
+  module.exports.mwBot.loggedIn = loggedIn;
 })()

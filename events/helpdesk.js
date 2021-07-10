@@ -1,6 +1,4 @@
-const EventSource = require( "eventsource" )
-    , RTRC = new EventSource( "https://stream.wikimedia.org/v2/stream/recentchange" )
-    , { MessageEmbed: DiscordMessageEmbed } = require( "discord.js" )
+const { MessageEmbed: DiscordMessageEmbed } = require( "discord.js" )
     , $ = require( process.cwd() + '/modules/jquery' )
 
 const logger = require( process.cwd() + '/modules/logger' )
@@ -12,21 +10,18 @@ const { mwBot } = require(process.cwd() + '/util/bots.js')
 
 module.exports = {
   name: "helpdesk",
-  fire: async send => {
-    RTRC.onmessage = async function (event) {
-      const data = JSON.parse(event.data)
-      if (
-        data.wiki !== "zhwiki" ||
-        (
-          data.title !== "WikiProject:建立條目/詢問桌"
-          // && data.title !== "User:LuciferianThomas/AFC測試2" // only for PJ:AFC/HD testing
-        ) ||
-        data.length.old >= data.length.new + 10
-      ) {
-        return
-      }
-
-
+  fire: async (send) => {
+    await mwBot.loggedIn;
+    let stream = new mwBot.stream( "recentchange" );
+    // console.log(stream)
+    stream.addListener((data) => {
+      // console.log()
+      return (
+        data.wiki === 'zhwiki'
+        && data.title === 'WikiProject:建立條目/詢問桌'
+        && data.length.old >= data.length.new + 10
+      )
+    }, async (data) => {
       let { compare } = await mwBot.request({
         action: "compare",
         format: "json",
@@ -82,6 +77,6 @@ module.exports = {
         tMsg,
         iMsg
       })
-    }
+    })
   },
 }
