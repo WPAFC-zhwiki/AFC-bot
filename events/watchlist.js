@@ -243,6 +243,7 @@ module.exports = {
                   issues.map(x => `${issuesData[x].long}`).join("\n* ")
                 }|botsig=--<span style="background:#ddd;padding:0.2em 0.75em;border:1px solid #999;border-radius:0.5em;">'''[[U:LuciferianBot|<span style="color:#000">路西法BOT</span>]]'''<sup>[[PJ:AFC|AFC]]</sup> • [[UT:LXFRNT|<span style="color:#000">留言</span>]]</span> ~~~~~}}`,
                 summary: `[[PJ:AFC|建立條目專題]]草稿[[:${title}]]自動審閱結果`,
+                bot: true
               }
             })
           }
