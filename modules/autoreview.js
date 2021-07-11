@@ -101,7 +101,7 @@ module.exports = async (wikitext = '', $parseHTML = $()) => {
     default: refs.wt.filter(function ([_i, x]) {
       return !/group=/i.test(x);
     }),
-    $references: refs.$ele.filter(function (_i, ele) {
+    $references: refs.$ele.first().children().filter(function (_i, ele) {
       return $(ele).find('a').length;
     }),
     $disallowed: refs.$ele.filter(function (_i, ele) {
