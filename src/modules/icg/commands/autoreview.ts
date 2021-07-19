@@ -164,4 +164,4 @@ const Command: command = {
   }
 };
 
-export default Command;
+export { Command };

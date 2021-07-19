@@ -151,9 +151,9 @@ logger.bot( 'Loading commands:' );
 
 const commandFiles = fs
   .readdirSync( process.cwd() + '/src/modules/icg/commands' )
-  .filter( ( file ) => file.endsWith( '.js' ) );
+  .filter( ( file ) => file.endsWith( '.ts' ) );
 
 for ( const file of commandFiles ) {
-  const Command: command = require( `./commands/${ file }` );
+  const Command: command = require( `./commands/${ file.replace(/.ts/,"") }` ).Command;
   bindCommand( Command );
 }

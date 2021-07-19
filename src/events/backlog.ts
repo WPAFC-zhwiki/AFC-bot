@@ -26,4 +26,4 @@ const Event: event = {
   }
 };
 
-export default Event;
+export { Event };

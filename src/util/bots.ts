@@ -15,6 +15,7 @@ import { DiscordToken, TelegramToken, IRCPassword, MWConfig } from 'src/util/cre
 
 import config from 'src/util/config.json'
 import * as logger from 'src/modules/logger'
+import * as fn from 'src/util/fn'
 
 const intents = new DiscordIntents()
 intents.add(
@@ -92,9 +93,11 @@ let loggedIn = mwBot.login();
 mwBot.plogin = loggedIn;
 export { mwBot };
 
-export const mwStream = async () => {
-  await loggedIn
-  return new mwBot.stream( "recentchange", {
-    onerror: (err) => { logger.error( "Event Source:", err ) }
-  } );
-}
+// export const mwStream = (() => {
+//   logger.info( "Preparing EventSource... ")
+//   let stream = new mwBot.stream( "recentchange", {
+//     onopen: () => { logger.success( "EventSource online." ) },
+//     onerror: ( err ) => { logger.error( "EventSource:", err ) }
+//   } );
+//   return stream
+// })();

@@ -9,17 +9,19 @@ import * as fn from 'src/util/fn'
 
 const { iB } = fn
 
-import { mwBot, mwStream } from 'src/util/bots'
+import { mwBot } from 'src/util/bots'
 
 import { event } from 'src/modules/events'
 
 const Event: event = {
   name: "helpdesk",
   fire: async (send) => {
-    let stream = await mwStream()
-    // console.log(stream)
-    stream.addListener((data) => {
-      // console.log()
+    await mwBot.plogin
+    let stream = new mwBot.stream( "recentchange", {
+      onopen: () => { logger.success( "EventSource online." ) },
+      onerror: ( err ) => { logger.error( "EventSource:", err ) }
+    } );
+    stream.addListener( ( data ) => {
       return (
         data.wiki === 'zhwiki'
         && data.title === 'WikiProject:建立條目/詢問桌'
@@ -85,4 +87,4 @@ const Event: event = {
   },
 }
 
-export default Event;
+export { Event };

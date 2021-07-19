@@ -35,9 +35,9 @@ logger.bot( 'Loading events:' );
 
 const eventFiles = fs
   .readdirSync( process.cwd() + '/src/events' )
-  .filter( ( file ) => file.endsWith( '.js' ) );
+  .filter( ( file ) => file.endsWith( '.ts' ) );
 
 for ( const file of eventFiles ) {
-  const event: event = require( process.cwd() + `/src/events/${ file }` );
-  bindEvent( event );
+  const Event: event = require( process.cwd() + `/src/events/${ file.replace(/.ts/,"") }` ).Event;
+  bindEvent( Event );
 }

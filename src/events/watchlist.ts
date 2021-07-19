@@ -6,11 +6,13 @@ import * as fn from 'src/util/fn'
 
 const { iB } = fn
 
-import { mwBot, mwStream } from 'src/util/bots'
+import { mwBot } from 'src/util/bots'
 import autoprview from 'src/modules/autoreview'
 import { issuesData } from 'src/modules/autoreview'
 
 import { MwnPage } from "mwn"
+
+import { event } from 'src/modules/events'
 
 const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $("<div>") ) => {
   // logger.log("Start ident a reason:", new Date())
@@ -63,12 +65,15 @@ const allowBots = (text, user = "LuciferianBot") => {
   return (new RegExp("\\{\\{\\s*bots\\s*\\|\\s*deny\\s*=\\s*([^}]*,\\s*)*"+user+"\\s*(?=[,\\}])[^}]*\\s*\\}\\}", "i").test(text)) ? false : new RegExp("\\{\\{\\s*((?!nobots)|bots(\\s*\\|\\s*allow\\s*=\\s*((?!none)|([^}]*,\\s*)*"+user+"\\s*(?=[,\\}])[^}]*|all))?|bots\\s*\\|\\s*deny\\s*=\\s*(?!all)[^}]*|bots\\s*\\|\\s*optout=(?!all)[^}]*)\\s*\\}\\}", "i").test(text);
 }
 
-module.exports = {
+const Event: event = {
   name: 'watchlist',
   fire: async (send) => {
-    let stream = await mwStream()
-    // console.log(stream)
-    stream.addListener((data) => {
+    await mwBot.plogin
+    let stream = new mwBot.stream( "recentchange", {
+      onopen: () => { logger.success( "EventSource online." ) },
+      onerror: ( err ) => { logger.error( "EventSource:", err ) }
+    } );
+    stream.addListener( ( data ) => {
       return (
         data.wiki === 'zhwiki'
         && data.type === 'categorize'
@@ -279,3 +284,5 @@ module.exports = {
     })
   }
 };
+
+export { Event };
