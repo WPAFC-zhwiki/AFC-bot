@@ -222,19 +222,19 @@ export const issuesData = {
 		long: '內容只包括外部链接、参见、图书参考、分类、模板、跨语言链接的条目（[[WP:D|消歧義頁]]、[[WP:R|重定向]]、[[WP:SRD|軟重定向]]除外）。'
 	},
 	'substub': {
-		short: '[[WP:SUBSTUB|小小作品]]，內容少於50字元',
+		short: '[小小作品](https://zhwp.org/WP:SUBSTUB)，內容少於50字元',
 		long: "'''內容過於短小，屬於[[WP:SUBSTUB|小小作品]]類別的草稿。'''小小作品可被[[WP:AFD|提請刪除]]，因此本專題不會接受小小作品的草稿，請擴充內容後再遞交。"
 	},
 	'stub': {
-		short: '[[WP:STUB|小作品]]',
+		short: '[小作品](https://zhwp.org/WP:STUB)',
 		long: "'''內容短小，屬於[[WP:STUB|小作品]]類別的草稿。'''建議補充更多的資訊，擴充內容後再遞交。謹記內容必須符合[[WP:NOR|非原創研究]]、[[WP:V|可供查證]]等方針，在擴充內容的同時要提供相應的[[WP:RS|可靠來源]]。"
 	},
 	'lengthy': {
-		short: '[[WP:LENGTH|內容過長]]',
+		short: '[內容過長](https://zhwp.org/WP:LENGTH)',
 		long: "'''[[WP:LENGTH|內容過長]]'''，草稿內容可能需要分拆。"
 	},
 	'wikify': {
-		short: '欠缺[[WP:WIKIFY|維基化]]',
+		short: '欠缺[維基化](https://zhwp.org/WP:WIKIFY)',
 		long: "'''草稿缺乏[[WP:WIKIFY|維基化]]。'''請加入適量的格式，例如條目名稱首次出現時加粗、補充[[Help:链接|內部連結]]等。"
 	},
 	'unreferenced': {
@@ -262,7 +262,7 @@ export const issuesData = {
 		long: "'''草稿缺乏[[WP:CAT|分類]]。'''請注意在草稿中加入分類時，<b>[[Category:分类]]</b>应当以<b>[[:Category:分类]]</b>（Category前加半角冒号）取代，或使用<nowiki></nowiki>包裹。"
 	},
 	'over-emphasize': {
-		short: '[[MOS:OEM|過度使用強調格式]]',
+		short: '[過度使用強調格式](https://zhwp.org/MOS:OEM)',
 		long: "'''草稿[[MOS:OEM|過度使用強調格式]]（包括但不限於粗體、斜體、粗方括號等）。'''請清理草稿的格式，只在有明確需要的情況下使用強調格式，不要濫用格式來強調內容。"
 	},
 	'bad-indents': {
