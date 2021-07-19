@@ -1,0 +1,24 @@
+{
+	"rules": {
+		"no-var-requires": 0
+	},
+	"compilerOptions": {
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"importHelpers": true,
+		"module": "CommonJS",
+		"moduleResolution": "node",
+		"outDir": "./build",
+		"removeComments": true,
+    "baseUrl": "./src", /* This is where all your code is*/
+		"resolveJsonModule": true,
+		"sourceMap": false,
+		"target": "es2017",
+    "paths": {
+      "src/*": [ "./*" ],
+      "icg/*": [ "./modules/icg/*" ]
+    }
+	},
+  "include": [ "./src/**/*" ]
+}

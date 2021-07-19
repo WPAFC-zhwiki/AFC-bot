@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "src": [ "./src" ],
+        "icg": [ "./src/modules/icg" ],
+        "tslib" : ["./node_modules/tslib/tslib.d.ts"]
+      }
+    }]
+  ]
+}
