@@ -21,7 +21,7 @@ export const bot = ( ...msgs: any[] ) => {
 }
 
 export const success = ( ...msgs: any[] ) => {
-  log( `\x1b[32m\[SUCCESS\]`, ...msgs )
+  log( `\x1b[32m\[SUCCESS\]\x1b[0m`, ...msgs )
 }
 
 export const debug = ( ...msgs: any[] ) => {
