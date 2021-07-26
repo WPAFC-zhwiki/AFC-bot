@@ -43,7 +43,7 @@ export class DiscordMessageHandler extends MessageHandler {
 				!that._enabled ||
 				rawdata.author.id === client.user.id ||
 				discordOptions.ignorebot && rawdata.author.bot ||
-				discordOptions.ignore.includes( rawdata.author.id )
+				(discordOptions.ignore || []).includes( rawdata.author.id )
 			) {
 				return;
 			}

@@ -96,6 +96,7 @@ export class IRCMessageHandler extends MessageHandler {
 		} );
 
 		client.on( 'error', function ( message ) {
+			console.log(message)
 			if ( message instanceof Error ) {
 				logger.error( `IRCBot error: ${ message }` );
 			} else {
@@ -121,7 +122,7 @@ export class IRCMessageHandler extends MessageHandler {
 			if (
 				!that._enabled ||
 				from === client.nick ||
-				ircOptions.ignore.map( function ( name ) {
+				(ircOptions.ignore || []).map( function ( name ) {
 					return new RegExp( `^${ lodash.escapeRegExp( name ) }\\d*$` );
 				} ).filter( function ( reg ) {
 					return reg.exec( from );

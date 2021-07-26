@@ -271,6 +271,19 @@ transport:
       sizeLimit: 4096                       # 檔案最大大小，單位 KiB。0 表示不限制。限制僅對 Telegram 有效
       timeout: 3000                         # 上传超时时间，单位毫秒，type 为 vim-cn、imgur 等外部图床时有效
       userAgent: ""                         # 访问外部图床时的 User-Agent，如留空则使用默认的 LilyWhiteBot/版本号
+  
+  servemedia:
+    type: '' # 檔案的處置方式：省略/留空/none、self、vim-cn、imgur、sm.ms、linx
+    cachePath: '' # type 為 self 時有效：快取存放位置
+    serveUrl: '' # type 為 self 時有效：檔案 URL 的字首，一般需要以斜線結尾
+    linxApiUrl: '' # type 為 linx 時有效：linx API 位址，一般以斜線結尾
+    uguuApiUrl: '' # type 為 uguu 時有效：以 /api.php?d=upload-tool 結尾
+    imgur: # type 為 imgur 時有效
+      apiUrl: 'https://api.imgur.com/3/' # 以斜線結尾
+      clientId: '' # 從 imgur 申請到的 client_id
+    sizeLimit: 4096 # 檔案最大大小，單位 KiB。0 表示不限制。限制僅對 Telegram 有效
+    timeout: 3000 # 上傳逾時時間，單位毫秒，type 為 vim-cn、imgur 等外部圖床時有效
+    userAgent: '' # 存取外部圖床時的 User-Agent，如留空則使用預設的 AFC-ICG-BOT/版本號
 
 ircquery:
   disables:                                 # 不要在這些群組使用 ircquery 功能
