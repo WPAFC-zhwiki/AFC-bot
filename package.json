@@ -4,7 +4,8 @@
   "description": "中文維基百科創建條目專題機械人",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register ./src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register ./src/index.ts",
+    "ssh": "ssh root@159.89.207.62"
   },
   "repository": {
     "type": "git",

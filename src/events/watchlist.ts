@@ -238,8 +238,8 @@ const Event: event = {
             if (
               tpQuery.pages[Object.keys(tpQuery.pages)[0]].contentmodel == "wikitext"
             ) {
-              // let talkPage = new mwBot.page(`User talk:${user}`)
-              let talkPage = new mwBot.page(`User:LuciferianThomas/AFC測試2`)
+              let talkPage = new mwBot.page(`User talk:${user}`)
+              // let talkPage = new mwBot.page(`User:LuciferianThomas/AFC測試2`)
               let tpWkt = await talkPage.text()
               if (!allowBots(tpWkt)) return;
   
@@ -266,8 +266,8 @@ const Event: event = {
                 action: "flow",
                 format: "json",
                 submodule: "new-topic",
-                // page: `User talk:${user}`,
-                page: `User talk:LuciferianThomas/AFC測試2`,
+                page: `User talk:${user}`,
+                // page: `User talk:LuciferianThomas/AFC測試2`,
                 nttopic: `您提交的草稿[[:${title}]]自動審閱結果（${now.getMonth()+1}月${now.getDate()}日）`,
                 ntcontent: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
                   issues.map(x => `${issuesData[x].long}`).join("\n* ")
