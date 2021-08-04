@@ -259,7 +259,7 @@ export const issuesData = {
 	},
 	'uncategorized': {
 		short: '沒有加入分類',
-		long: "'''草稿缺乏[[WP:CAT|分類]]。'''請注意在草稿中加入分類時，<b>[[Category:分类]]</b>应当以<b>[[:Category:分类]]</b>（Category前加半角冒号）取代，或使用<nowiki></nowiki>包裹。"
+		long: "'''草稿缺乏[[WP:CAT|分類]]。'''請注意在草稿中加入分類時，<nowiki>[[</nowiki>Category:分类<nowiki>]]</nowiki>应当以<nowiki>[[:</nowiki>Category:分类<nowiki>]]</nowiki>（Category前加半角冒号）取代，或使用<nowiki></nowiki>包裹。"
 	},
 	'over-emphasize': {
 		short: '[過度使用強調格式](https://zhwp.org/MOS:OEM)',
