@@ -31,3 +31,9 @@ export const eURIC = ( string: string ) => {
 }
 
 export const iB = String.fromCharCode( 0x02 )
+
+import TurndownService from 'turndown';
+
+const service = new TurndownService();
+
+export const turndown: typeof TurndownService.prototype.turndown = service.turndown.bind( service );

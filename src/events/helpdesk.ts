@@ -39,19 +39,23 @@ const Event: event = {
       $diff.find('.diff-addedline').each((_i, ele) => {
         diffText += $(ele).text() + "\n"
       })
+
       let parse = await mwBot.parseWikitext(diffText)
-      let parseTG = $(
-        parse.replace(/(?:https:\/\/zh.wikipedia.org)?\/w/g,"https://zhwp.org/w")
-          .replace(/<(\/?)a(.*?)>/g, "&lt;$1a$2&gt;")
-      ).text()
-      parse = parse
-        .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
-          return `[${p2}](${fn.eURIC(p1)})`
-        })
-        .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
       let $parse = $(parse)
-      let parseText = $parse.text()
-      let parseIRC = parseText.replace(/(?<!\[)\[(.*?)\]\((.*?)\)(?!\))/g, ` $1 <$2> `)
+      $parse.find( 'a' ).each( function ( _i, a ) {
+        const $a: JQuery<HTMLAnchorElement> = $( a );
+        const url = new URL( $a.attr( 'href' ), 'https://zh.wikipedia.org/WikiProject:建立條目/詢問桌' );
+        $a.text( `<a href="${ url.href }">${ $a.text() }</a>` );
+      } );
+      let parseHTML = $parse.text()
+      let parseMD = fn.turndown( parseHTML )
+      let parseIRC = parseHTML
+        .replace( /<a href="([^"]+)">([^<]+)<\/a>/g, function ( _all: string, href: string, txt: string ) {
+          href = href.trim().replace( /^https:\/\/zh\.wikipedia\.org\/(wiki\/)?/g, 'https://zhwp.org/' );
+          return ` ${ txt } <${ decodeURI( href ) }>`;
+        } )
+        .replace( /https:\/\/zh\.wikipedia\.org\/(wiki\/)?/g, 'https://zhwp.org/' )
+        .replace( /<b>(.*?)<\/b>/g, `${ iB }$1${ iB }` );
 
       let dMsg = new DiscordMessageEmbed()
         .setColor("BLUE")
@@ -64,19 +68,19 @@ const Event: event = {
         )
         .addField(
           "留言內容",
-          (parseText.length > 1024 ? parseText.substring(0, 1021) + "..." : parseText)
+          (parseMD.length > 1024 ? parseMD.substring(0, 1021) + "..." : parseMD)
         )
       let tMsg =
         `<a href="https://zhwp.org/WikiProject:建立條目/詢問桌"><b>詢問桌有新留言！</b></a>\n` +
         `留言者：<a href="https://zhwp.org/User:${data.user}">${data.user}</a>\n` +
         `留言內容：\n` +
-        (parseTG.length > 2048 ? parseTG.substring(0, 2045) + "..." : parseTG)
+        (parseHTML.length > 2048 ? parseHTML.substring(0, 2045) + "..." : parseHTML)
       
       let iMsg =
       `${iB}詢問桌有新留言！${iB} <https://zhwp.org/WikiProject:建立條目/詢問桌>\n` +
       `留言者：${data.user} <https://zhwp.org/User:${data.user}>\n` +
       `留言內容：\n` +
-      (parseText.length > 2048 ? parseText.substring(0, 2045) + "..." : parseText)
+      (parseIRC.length > 2048 ? parseIRC.substring(0, 2045) + "..." : parseIRC)
       
       send({
         dMsg,

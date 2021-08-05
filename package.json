@@ -43,6 +43,7 @@
     "string-format": "^2.0.0",
     "telegraf": "^3.38.0",
     "tslib": "^2.3.0",
+    "turndown": "^7.1.1",
     "typescript": "^4.3.5"
   },
   "devDependencies": {

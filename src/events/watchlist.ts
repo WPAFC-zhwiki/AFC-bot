@@ -14,7 +14,9 @@ import { MwnPage } from "mwn"
 
 import { event } from 'src/modules/events'
 
-const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $("<div>") ) => {
+import { isReviewer } from 'src/util/reviewers'
+
+const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $( "<div>" ) ) => {
   // logger.log("Start ident a reason:", new Date())
   if ($e.find("table").length) {
     $e.find(".hide-when-compact, .date-container").remove()
@@ -22,7 +24,7 @@ const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $("<div>") )
   if ($e.find(".mbox-image a").length) {
     $e.find(".mbox-image a").remove()
   }
-  console.log($e.prop('outerHTML'))
+  // console.log($e.prop('outerHTML'))
   $e = $(
     $e.prop('outerHTML')
       .replace(/<a .*?href="(.*?)".*?>(.*?)<\/a>/gi, (match, p1, p2, offset, string) => {
@@ -30,7 +32,7 @@ const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $("<div>") )
       })
       .replace(/\((?:https:\/\/zh.wikipedia.org)?\/w/g,"(https://zhwp.org/w")
   )
-  console.log($e.prop('outerHTML'))
+  // console.log($e.prop('outerHTML'))
   let $ambox = $e.find("table.ambox").clone()
   $e.find("table.ambox").remove()
   // logger.debug($ambox.prop('outerHTML'))
@@ -50,7 +52,6 @@ const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $("<div>") )
     .split(/\r•/g)
     .map(x => x.trim())
     .filter(x => x.length && x !== "。")
-    .map(x => x.split(/[。！？]/g)[0] + "。")
     .join("\r• ")
 
   if (text === "\r• 。") {
@@ -73,17 +74,14 @@ const Event: event = {
       onopen: () => { logger.success( "EventSource online." ) },
       onerror: ( err ) => { logger.error( "EventSource:", err ) }
     } );
-    stream.addListener( ( data ) => {
-      return (
-        data.wiki === 'zhwiki'
-        && data.type === 'categorize'
-        && data.title === 'Category:正在等待審核的草稿'
-      )
-    }, async (data) => {
+    stream.addListener( ( data ) => 
+      data.wiki === 'zhwiki'
+      && data.type === 'categorize'
+      && data.title === 'Category:正在等待審核的草稿'
+    , async (data) => {
       try {
         const title = data.comment.replace(/^\[\[:?([^[\]]+)\]\].*$/, '$1');
-  
-        // if (status == "removed") return; // 稍後處理
+        
         let { user } = data;
   
         let issues = []
@@ -106,8 +104,12 @@ const Event: event = {
         let $submissionbox = $parseHTML.find('.afc-submission-pending').length 
           ? $parseHTML.find('.afc-submission-pending').first()
           : $parseHTML.find('.afc-submission').first();
-        logger.debug($submissionbox.length, page.namespace)
-        if (!$submissionbox.length && page.namespace === 0) {
+
+        // 已接受草稿
+        if (
+          !$submissionbox.length && page.namespace === 0
+          && user !== creator && isReviewer( user )
+        ) {
           mode = "accept"
           output += `已接受[${creator}](https://zhwp.org/User:${fn.eURIC(creator)})的草稿[${title}](https://zhwp.org/${fn.eURIC(title)})`;
           let tpClass;
@@ -119,28 +121,41 @@ const Event: event = {
           }
           let cClass;
           switch (tpClass) {
-            case 'B':
-              cClass = '乙';
-              break;
-            case 'C':
-              cClass = '丙';
-              break;
-            case 'start':
-              cClass = '初';
-              break;
-            case 'stub':
-              cClass = '小作品';
-              break;
-            case 'list':
-              cClass = '列表';
-              break;
+            case 'B': cClass = '乙'; break;
+            case 'C': cClass = '丙'; break;
+            case 'start': cClass = '初'; break;
+            case 'stub': cClass = '小作品'; break;
+            case 'list': cClass = '列表'; break;
           }
           if (cClass) output += `並評為${cClass}級。`;
           else output += `，未評級。`
-        } else if (!$submissionbox.length && page.namespace !== 0) {
+        }
+        
+        // 移除AFC模板
+        else if (!$submissionbox.length && page.namespace !== 0) {
+          const pagehistory = await page.history( 'user', 2, {
+            rvslots: 'main'
+          } );
+          if ( pagehistory.length === 1 ) {
+            mode = "create-ns0"
+            const movequery = new URLSearchParams( {
+              wpOldTitle: title,
+              wpNewTitle: `Draft:${ title }`,
+              wpReason: '由[[Wikipedia:建立條目|建立條目精靈]]建立但錯誤放置在主名字空間且未符合條目收錄要求的草稿'
+            } );
+            const moveurl = `https://zh.wikipedia.org/wiki/Special:MovePage?${ movequery.toString() }`;
+            output += `在條目命名空間建立了草稿<a href="https://zhwp.org/${fn.eURIC(title)}"><b>${title}</b></a>（<a href="${ moveurl }">移動到草稿命名空間</a>）`
+          } else {
+            mode = "remove"
+            output += `移除了在條目命名空間的草稿<a href="https://zhwp.org/${fn.eURIC(title)}"><b>${title}</b></a>中的AFC模板。`;
+          }
+        } else if ( !$submissionbox.length ) {
           mode = "remove"
           output += `移除了[${creator}](https://zhwp.org/User:${fn.eURIC(creator)})的草稿[${title}](https://zhwp.org/${fn.eURIC(title)})的AFC模板。`;
-        } else if ($submissionbox.hasClass('afc-submission-pending')) {
+        }
+        
+        // 提交草稿
+        else if ($submissionbox.hasClass('afc-submission-pending')) {
           mode = "submit"
           output += '提交了';
           if (creator !== user) {
