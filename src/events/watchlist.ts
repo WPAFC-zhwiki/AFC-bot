@@ -7,7 +7,7 @@ import * as fn from 'src/util/fn'
 const { iB } = fn
 
 import { mwBot } from 'src/util/bots'
-import autoprview from 'src/modules/autoreview'
+import autoreview from 'src/modules/autoreview'
 import { issuesData } from 'src/modules/autoreview'
 
 import { MwnPage } from "mwn"
@@ -163,7 +163,7 @@ const Event: event = {
           }
           output += `草稿[${title}](https://zhwp.org/${fn.eURIC(title)})。`;
   
-          issues = (await autoprview(wikitext, $parseHTML.children())).issues
+          issues = ( await autoreview( page, wikitext, $parseHTML.children(), { user, creator } ) ).issues
         } else if (
           $submissionbox.hasClass('afc-submission-declined') ||
           $submissionbox.hasClass('afc-submission-rejected')

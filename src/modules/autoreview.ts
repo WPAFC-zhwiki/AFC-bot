@@ -1,5 +1,7 @@
 import $ from 'src/modules/jquery'
 
+import { MwnPage } from 'mwn'
+
 const findCopyvio = async (qString) => {
   return 0;
   // try {
@@ -35,10 +37,46 @@ export type elementsTS = {
 	cats: RegExpMatchArray
 }
 
-export default async function ( wikitext: string, $parseHTML: JQuery<HTMLElement|Node[]> ): Promise<{
+export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQuery<HTMLElement|Node[]>, ext?: { user?: string, creator?: string } ): Promise<{
 	issues: string[];
 	elements: elementsTS;
 }> {
+	const issues: string[] = [];
+
+	let title = page.getMainText();
+
+	if ( title === ext.user ) {
+		issues.push( 'same-name' );
+	} else if ( title === ext.creator ) {
+		issues.push( 'same-name-creator' );
+	} else {
+		if ( page.namespace === 2 ) {
+			const split = title.split( '/' );
+			split.shift();
+
+			if ( !split.length ) {
+				return;
+			}
+
+			title = split.join( '/' );
+		}
+
+		if ( title.includes( ext.user ) || ext.user.includes( title ) ) {
+			issues.push( 'same-name' );
+		} else if ( title.includes( ext.creator ) || ext.creator.includes( title ) ) {
+			issues.push( 'same-name-creator' );
+		}
+	}
+
+	const defaults = [
+		'\'\'\'此处改为条目主题\'\'\'(?:是一个)?',
+		'==\\s*章节标题\\s*=='
+	];
+	const regexp = new RegExp( `(${ defaults.join( '|' ) })` );
+	if ( regexp.exec( wikitext ) ) {
+		issues.push( 'default-wikitext' );
+	}
+
 	const delval = {
 		tags: [
 			// 表格
@@ -114,8 +152,6 @@ export default async function ( wikitext: string, $parseHTML: JQuery<HTMLElement
 	}() ).remove();
 
 	const countText = $countHTML.text().replace( /\n/g, '' );
-
-	const issues: string[] = [];
 
 	wikitext.replace( /<ref.*?>.*?<\/ref>/gi, '' );
 
@@ -272,5 +308,17 @@ export const issuesData = {
 	'copyvio': {
 		short: '可能包含侵權內容',
 		long: "'''草稿可能包含[[WP:COPYVIO|侵犯版權]]的內容。'''一旦確認後，侵權內容將被刪除。請移除侵權內容，並以自己的文字重寫內容。"
+	},
+	'same-name': {
+		short: "提交者與頁面同名",
+		long: "'''提交者用戶名與草稿相同。'''維基百科不允許任何人、團體或公司利用維基百科進行宣傳，根據[[WP:UN|用戶名方針]]，使用[[WP:IU|誤導性或宣傳性用戶名]]均被禁止。請[[WP:UNC|更改用戶名]]，否則您的帳號可能會被封鎖。"
+	},
+	"same-name-creator": {
+		short: "建立者與頁面同名",
+		long: "'''建立者用戶名與草稿相同。'''維基百科不允許任何人、團體或公司利用維基百科進行宣傳，根據[[WP:UN|用戶名方針]]，使用[[WP:IU|誤導性或宣傳性用戶名]]均被禁止。草稿創建者應當[[WP:UNC|更改用戶名]]以免被封鎖。"
+	},
+	"default-wikitext": {
+		short: "頁面尚有預設內容",
+		long: "'''頁面尚有預設內容'''，包括「此处改为条目主题」、「章节标题」等。請儘快替換或清理有關內容。"
 	}
 };

@@ -3,7 +3,7 @@ import $ from "src/modules/jquery"
 import * as fn from 'src/util/fn'
 
 import { mwBot } from 'src/util/bots'
-import autoprview from 'src/modules/autoreview'
+import autoreview from 'src/modules/autoreview'
 import { issuesData } from 'src/modules/autoreview'
 
 import { iB } from 'src/util/fn'
@@ -63,6 +63,7 @@ const Command: command = {
       rdrFrom = `${title}`
       title = `${rdrTgt}`
     }
+    let creator = await page.getCreator();
 
     if ( [ 0, 2, 118 ].indexOf( page.namespace ) === -1 ) {
       return reply( {
@@ -81,7 +82,7 @@ const Command: command = {
     } );
     const $parseHTML = $( $.parseHTML( html ) ).children();
 
-    const { issues } = await autoprview( wikitext, $parseHTML );
+    const { issues } = await autoreview( page, wikitext, $parseHTML, { creator } );
 
     let output = `系統剛剛自動審閱了<b>[${ title }](https://zhwp.org/${ fn.eURIC( title ) })</b>頁面${rdrFrom ? `（重新導向自[${rdrFrom}](https://zhwp.org/${ encodeURI(rdrFrom) })）` : ""}，初步`;
 
