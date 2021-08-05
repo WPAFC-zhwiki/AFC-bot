@@ -1,3 +1,6 @@
 node_modules
 .env
 build
+
+# temporarily ignore
+src/events/watchlist-beta.ts
