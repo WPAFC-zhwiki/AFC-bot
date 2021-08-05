@@ -25,7 +25,7 @@ const Event: event = {
       return (
         data.wiki === 'zhwiki'
         && data.title === 'WikiProject:建立條目/詢問桌'
-        && data.length && data.length.old >= data.length.new + 10
+        && ( data.length?.old || 11 ) < ( data.length?.new || 0 ) + 10
       )
     }, async (data) => {
       let { compare } = await mwBot.request({
