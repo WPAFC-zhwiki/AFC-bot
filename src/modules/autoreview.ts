@@ -27,12 +27,12 @@ export type elementsTS = {
 	refs: {
 		all: {
 			wt: string[][];
-			$ele: JQuery<HTMLElement>
+			$ele: JQuery<HTMLElement|Node[]>
 		};
 		default: string[][];
-		$references: JQuery<HTMLElement>;
-		$disallowed: JQuery<HTMLElement>;
-		$unreliable: JQuery<HTMLElement>;
+		$references: JQuery<HTMLElement|Node[]>;
+		$disallowed: JQuery<HTMLElement|Node[]>;
+		$unreliable: JQuery<HTMLElement|Node[]>;
 	},
 	cats: RegExpMatchArray
 }
@@ -61,7 +61,7 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 			title = split.join( '/' );
 		}
 
-		if ( title.includes( ext.user ) || ext.user.includes( title ) ) {
+		if ( title.includes( ext.user ) || (ext.user || "").includes( title ) ) {
 			issues.push( 'same-name' );
 		} else if ( title.includes( ext.creator ) || ext.creator.includes( title ) ) {
 			issues.push( 'same-name-creator' );
@@ -159,7 +159,7 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 		wt: ( wikitext.match( /<ref.*?>.*?<\/ref>/gi ) || [] ).map( function ( x, i ) {
 			return [ String( i ), x ];
 		} ),
-		$ele: $parseHTML.find( 'ol.references' )
+		$ele: $parseHTML.filter( 'ol.references' )
 	};
 	refs.$ele.find( '.mw-cite-backlink' ).remove();
 

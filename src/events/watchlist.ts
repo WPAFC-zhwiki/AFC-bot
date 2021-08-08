@@ -132,7 +132,7 @@ const Event: event = {
         }
         
         // 移除AFC模板
-        else if (!$submissionbox.length && page.namespace !== 0) {
+        else if (!$submissionbox.length && page.namespace === 0) {
           const pagehistory = await page.history( 'user', 2, {
             rvslots: 'main'
           } );
@@ -144,10 +144,10 @@ const Event: event = {
               wpReason: '由[[Wikipedia:建立條目|建立條目精靈]]建立但錯誤放置在主名字空間且未符合條目收錄要求的草稿'
             } );
             const moveurl = `https://zh.wikipedia.org/wiki/Special:MovePage?${ movequery.toString() }`;
-            output += `在條目命名空間建立了草稿<a href="https://zhwp.org/${fn.eURIC(title)}"><b>${title}</b></a>（<a href="${ moveurl }">移動到草稿命名空間</a>）`
+            output += `在條目命名空間建立了草稿<b>[${title}](https://zhwp.org/${fn.eURIC(title)})</b>（[移動到草稿命名空間](${ moveurl })）`
           } else {
             mode = "remove"
-            output += `移除了在條目命名空間的草稿<a href="https://zhwp.org/${fn.eURIC(title)}"><b>${title}</b></a>中的AFC模板。`;
+            output += `移除了在條目命名空間的草稿<b>[${title}](https://zhwp.org/${fn.eURIC(title)})</b>中的AFC模板。`;
           }
         } else if ( !$submissionbox.length ) {
           mode = "remove"
@@ -207,7 +207,7 @@ const Event: event = {
           return;
         }
   
-        let dMsg = new DiscordMessageEmbed().setDescription(`**${output}**`);
+        let dMsg = new DiscordMessageEmbed().setDescription(`**${output.replace(/<b>(.*?)<\/b>/,"$1")}**`);
         let tMsg = output;
         if (issues && issues.length) {
           dMsg.addField(
