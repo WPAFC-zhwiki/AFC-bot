@@ -6,7 +6,7 @@ import { mwBot } from 'src/util/bots'
 import autoreview from 'src/modules/autoreview'
 import { issuesData } from 'src/modules/autoreview'
 
-import { iB } from 'src/util/fn'
+import { iB, allowBots } from 'src/util/fn'
 
 import { command } from 'icg/command'
 
@@ -29,7 +29,17 @@ const Command: command = {
       dMsg: "計算中……",
       iMsg: "計算中……"
     }, false );
-    let title: string = args.join( ' ' ).split( '#' )[ 0 ];
+
+    let argsStr = args.join( ' ' )
+    let argsList: any = {}
+    argsStr.match(/--(.*?)=([^\s]*|".*?")/g).forEach( (v, i) => {
+      let match = v.match(/--(.*?)=([^\s]*|".*?")/)
+      argsList[ match[1] ] = match[2].replace(/^"(.*?)"$/g, "$1")
+    } )
+    argsStr = argsStr.replace(/--(.*?)=([^\s]*|".*?")/g, "")
+    console.log(argsStr, argsList)
+    
+    let title: string = argsStr.split( '#' )[ 0 ];
 
     /**
      * @type {import('mwn').MwnPage}
@@ -112,20 +122,21 @@ const Command: command = {
       iMsg
     }, false);
 
-    /** ONLY FOR TESTING
-    if (issues && issues.length > 0) {
+    // /** ONLY FOR TESTING
+    if (issues && issues.length > 0 && argsList.fwd) {
       let now = new Date()
       let { query: tpQuery } = await mwBot.request({
         action: "query",
-        titles: `User talk:LuciferianThomas/AFC測試2`,
+        titles: `User talk:${creator}`,
+        // titles: `User talk:LuciferianThomas/AFC測試2`,
         prop: "info"
       })
 
       if (
-        Object.values(tpQuery.pages)[0].contentmodel == "wikitext"
+        tpQuery.pages[Object.keys(tpQuery.pages)[0]].contentmodel == "wikitext"
       ) {
-        // let talkPage = new mwBot.page(`User talk:${user}`)
-        let talkPage = new mwBot.page(`User talk:LuciferianThomas/AFC測試2`)
+        let talkPage = new mwBot.page(`User talk:${creator}`)
+        // let talkPage = new mwBot.page(`User talk:LuciferianThomas/AFC測試2`)
         let tpWkt = await talkPage.text()
         if (!allowBots(tpWkt)) return;
 
@@ -151,7 +162,8 @@ const Command: command = {
           action: "flow",
           format: "json",
           submodule: "new-topic",
-          page: `User talk:LuciferianThomas/AFC測試2`,
+          page: `User talk:${creator}`,
+          // page: `User talk:LuciferianThomas/AFC測試2`,
           nttopic: `您提交的草稿[[:${title}]]自動審閱結果（${now.getMonth()+1}月${now.getDate()}日）`,
           ntcontent: `{{subst:AFC botreview|reason=<nowiki/>\n* ${
             issues.map(x => `${issuesData[x].long}`).join("\n* ")
@@ -161,7 +173,7 @@ const Command: command = {
         })
       }
     }
-    **/
+    // **/
   }
 };
 

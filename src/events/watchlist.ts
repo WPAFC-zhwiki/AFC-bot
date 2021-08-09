@@ -4,7 +4,7 @@ import $ from 'src/modules/jquery'
 import * as logger from 'src/modules/logger'
 import * as fn from 'src/util/fn'
 
-const { iB } = fn
+const { iB, allowBots } = fn
 
 import { mwBot } from 'src/util/bots'
 import autoreview from 'src/modules/autoreview'
@@ -59,11 +59,6 @@ const getReason = ( page: MwnPage, $e: JQuery<HTMLElement|Node[]> = $( "<div>" )
   }
   // logger.log("Done identing reason:", new Date())
   return text.replace(/此條目/g, "草稿").replace(/\n/g, "").replace(/\r/g,"\n").replace(/\n• (?:$|\n)/g,"")
-}
-
-const allowBots = (text, user = "LuciferianBot") => {
-  if (!new RegExp("\\{\\{\\s*(nobots|bots[^}]*)\\s*\\}\\}", "i").test(text)) return true;
-  return (new RegExp("\\{\\{\\s*bots\\s*\\|\\s*deny\\s*=\\s*([^}]*,\\s*)*"+user+"\\s*(?=[,\\}])[^}]*\\s*\\}\\}", "i").test(text)) ? false : new RegExp("\\{\\{\\s*((?!nobots)|bots(\\s*\\|\\s*allow\\s*=\\s*((?!none)|([^}]*,\\s*)*"+user+"\\s*(?=[,\\}])[^}]*|all))?|bots\\s*\\|\\s*deny\\s*=\\s*(?!all)[^}]*|bots\\s*\\|\\s*optout=(?!all)[^}]*)\\s*\\}\\}", "i").test(text);
 }
 
 const Event: event = {
