@@ -39,7 +39,7 @@ const Command: command = {
     argsStr = argsStr.replace(/--(.*?)=([^\s]*|".*?")/g, "")
     console.log(argsStr, argsList)
     
-    let title: string = argsStr.split( '#' )[ 0 ];
+    let title: string = argsStr.split( '#' )[ 0 ].trim();
 
     /**
      * @type {import('mwn').MwnPage}
