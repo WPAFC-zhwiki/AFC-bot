@@ -80,7 +80,7 @@ const Command: command = {
       title: title,
       uselang: 'zh-hant'
     } );
-    const $parseHTML = $( $.parseHTML( html ) ).children();
+    const $parseHTML = $( $.parseHTML( html ) );
 
     const { issues } = await autoreview( page, wikitext, $parseHTML, { creator } );
 

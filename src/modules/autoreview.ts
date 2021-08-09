@@ -161,8 +161,7 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 		wt: ( wikitext.match( /<ref.*?>.*?<\/ref>/gi ) || [] ).map( function ( x, i ) {
 			return [ String( i ), x ];
 		} ),
-		$ele: $parseHTML.filter( 'ol.references' ).length
-					? $parseHTML.filter( 'ol.references' ) : $parseHTML.find( 'ol.references' )
+		$ele: $parseHTML.find( 'ol.references' )
 	};
 	refs.$ele.find( '.mw-cite-backlink' ).remove();
 
@@ -249,6 +248,7 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 		issues.push( 'bad-indents' );
 	}
 
+	console.log( `${title} has the following issues: ${issues.join(', ')}` )
 	return {
 		issues,
 		elements

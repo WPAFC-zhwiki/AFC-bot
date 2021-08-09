@@ -163,7 +163,7 @@ const Event: event = {
           }
           output += `草稿[${title}](https://zhwp.org/${fn.eURIC(title)})。`;
   
-          issues = ( await autoreview( page, wikitext, $parseHTML.children(), { user, creator } ) ).issues
+          issues = ( await autoreview( page, wikitext, $parseHTML, { user, creator } ) ).issues
         } else if (
           $submissionbox.hasClass('afc-submission-declined') ||
           $submissionbox.hasClass('afc-submission-rejected')
