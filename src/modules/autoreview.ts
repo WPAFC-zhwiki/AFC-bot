@@ -174,7 +174,7 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 				return !/group=/i.test( String( x ) );
 			} ),
 			$references: refs.$ele.filter( function ( _i, ele ) {
-				return !!$( ele ).find( 'a' ).length;
+				return !!($( ele ).find( 'a, cite.citation' ).length);
 			} ),
 			$disallowed: refs.$ele.filter( function ( _i, ele ) {
 				return !!$( ele ).html().match( /baike.baidu.com|百度|quora.com|toutiao.com|pincong.rocks|zhihu.com|知乎/ );

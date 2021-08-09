@@ -32,11 +32,12 @@ const Command: command = {
 
     let argsStr = args.join( ' ' )
     let argsList: any = {}
-    argsStr.match(/--(.*?)=([^\s]*|".*?")/g).forEach( (v, i) => {
-      let match = v.match(/--(.*?)=([^\s]*|".*?")/)
+    let matches = argsStr.match(/(?:--|\—)(.*?)=([^\s]*|".*?")/g)
+    if (matches) matches.forEach( (v, i) => {
+      let match = v.match(/(?:--|—)(.*?)=([^\s]*|".*?")/)
       argsList[ match[1] ] = match[2].replace(/^"(.*?)"$/g, "$1")
     } )
-    argsStr = argsStr.replace(/--(.*?)=([^\s]*|".*?")/g, "")
+    argsStr = argsStr.replace(/(?:--|—)(.*?)=([^\s]*|".*?")/g, "")
     console.log(argsStr, argsList)
     
     let title: string = argsStr.split( '#' )[ 0 ].trim();
