@@ -41,6 +41,8 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 	issues: string[];
 	elements: elementsTS;
 }> {
+	console.log( $parseHTML )
+
 	const issues: string[] = [];
 
 	let title = page.getMainText();
@@ -159,7 +161,8 @@ export default async function ( page: MwnPage, wikitext: string, $parseHTML: JQu
 		wt: ( wikitext.match( /<ref.*?>.*?<\/ref>/gi ) || [] ).map( function ( x, i ) {
 			return [ String( i ), x ];
 		} ),
-		$ele: $parseHTML.filter( 'ol.references' )
+		$ele: $parseHTML.filter( 'ol.references' ).length
+					? $parseHTML.filter( 'ol.references' ) : $parseHTML.find( 'ol.references' )
 	};
 	refs.$ele.find( '.mw-cite-backlink' ).remove();
 
