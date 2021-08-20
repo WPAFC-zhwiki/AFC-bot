@@ -1,10 +1,11 @@
-import { MwnOptions } from 'mwn'
+import { MwnOptions } from 'mwn';
+import { default as config, version, repository } from 'src/util/config';
 
-export const DiscordToken = process.env.DISCORD_BOT_TOKEN
-export const TelegramToken = process.env.TELEGRAM_BOT_TOKEN
-export const IRCPassword = process.env.IRC_BOT_PW
-export const MWConfig: MwnOptions = {
-  username: "LuciferianBot@AFCHBot2.0",
-  password: process.env.WIKIBOTPW,
-  userAgent: "ZHAFC/2.0 (https://github.com/WPAFC-zhwiki/ICG-Bot)"
+export const DiscordBot = config.Discord.bot;
+export const TelegramBot = config.Telegram.bot;
+export const IRCBot = config.IRC.bot;
+export const MWConfig: MwnOptions = config.afc.mwn;
+
+if ( MWConfig.userAgent.length === 0 ) {
+	MWConfig.userAgent = `AFC-ICG-BOT/${ version } (${ repository.url.replace( /^git\+/, '' ) })`;
 }

@@ -1,54 +1,74 @@
 {
-  "name": "zhwp-afc-bot",
-  "version": "2.1.2",
-  "description": "中文維基百科創建條目專題機械人",
-  "main": "index.js",
-  "scripts": {
-    "start": "ts-node -r tsconfig-paths/register ./src/index.ts",
-    "ssh": "ssh root@159.89.207.62"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/WPAFC-zhwiki/AFC-bot.git"
-  },
-  "author": "LuciferianThomas & Sunny00217",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/WPAFC-zhwiki/AFC-bot/issues"
-  },
-  "homepage": "https://github.com/WPAFC-zhwiki/AFC-bot#readme",
-  "dependencies": {
-    "@types/cron": "^1.7.3",
-    "@types/lodash": "^4.14.171",
-    "app-module-path": "^2.2.0",
-    "cron": "^1.8.2",
-    "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0",
-    "es6-shim": "^0.35.6",
-    "eventsource": "^1.1.0",
-    "fs": "0.0.1-security",
-    "irc": "^0.5.2",
-    "irc-colors": "^1.5.0",
-    "irc-upd": "^0.11.0",
-    "jquery": "^3.6.0",
-    "js-yaml": "^4.1.0",
-    "jsdom": "^16.6.0",
-    "lodash": "^4.17.21",
-    "lru-cache": "^6.0.0",
-    "moment": "^2.29.1",
-    "mwn": "^0.11.1",
-    "node-fetch": "^2.6.1",
-    "request": "^2.88.2",
-    "sharp": "^0.28.3",
-    "string-format": "^2.0.0",
-    "telegraf": "^3.38.0",
-    "tslib": "^2.3.0",
-    "turndown": "^7.1.1",
-    "typescript": "^4.3.5"
-  },
-  "devDependencies": {
-    "@types/irc": "^0.5.1",
-    "babel-plugin-module-resolver": "^4.1.0",
-    "tsconfig-paths": "^3.10.1"
-  }
+	"name": "zhwp-afc-bot",
+	"version": "2.1.2",
+	"description": "中文維基百科創建條目專題機械人",
+	"main": "index.js",
+	"scripts": {
+		"start": "grunt clean && ts-node -r tsconfig-paths/register ./src/index.ts",
+		"test": "eslint **/*.ts && grunt build && node bin/index"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/WPAFC-zhwiki/AFC-bot.git"
+	},
+	"author": "LuciferianThomas & Sunny00217",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/WPAFC-zhwiki/AFC-bot/issues"
+	},
+	"homepage": "https://github.com/WPAFC-zhwiki/AFC-bot#readme",
+	"dependencies": {
+		"@types/cron": "^1.7.3",
+		"@types/irc": "^0.5.1",
+		"@types/js-yaml": "^4.0.2",
+		"@types/lodash": "^4.14.171",
+		"@types/turndown": "^5.0.1",
+		"app-module-path": "^2.2.0",
+		"cron": "^1.8.2",
+		"discord.js": "^12.5.3",
+		"dotenv": "^10.0.0",
+		"es6-shim": "^0.35.6",
+		"eventsource": "^1.1.0",
+		"fs": "0.0.1-security",
+		"fs-extra": "^10.0.0",
+		"grunt": "^1.4.1",
+		"irc": "^0.5.2",
+		"irc-colors": "^1.5.0",
+		"irc-upd": "^0.11.0",
+		"jquery": "^3.6.0",
+		"js-yaml": "^4.1.0",
+		"jsdom": "^16.6.0",
+		"lodash": "^4.17.21",
+		"lru-cache": "^6.0.0",
+		"module-alias": "^2.2.2",
+		"moment": "^2.29.1",
+		"mwn": "^0.11.1",
+		"node-fetch": "^2.6.1",
+		"request": "^2.88.2",
+		"sharp": "^0.28.3",
+		"string-format": "^2.0.0",
+		"telegraf": "^3.38.0",
+		"tslib": "^2.3.0",
+		"turndown": "^7.1.1",
+		"typescript": "^4.3.5"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^9.0.12",
+		"@types/jsdom": "^16.2.13",
+		"@types/lru-cache": "^5.1.1",
+		"@types/module-alias": "^2.0.1",
+		"@types/request": "^2.48.7",
+		"@types/sharp": "^0.28.5",
+		"@types/string-format": "^2.0.0",
+		"@typescript-eslint/eslint-plugin": "^4.29.1",
+		"babel-plugin-module-resolver": "^4.1.0",
+		"eslint": "^7.30.0",
+		"eslint-config-wikimedia": "^0.20.0",
+		"eslint-import-resolver-typescript": "^2.4.0",
+		"eslint-plugin-import": "^2.23.4",
+		"tsconfig-paths": "^3.10.1"
+	},
+	"engines": {
+		"node": ">=14.15.0"
+	}
 }

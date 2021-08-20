@@ -11,14 +11,23 @@
 		"moduleResolution": "node",
 		"outDir": "./build",
 		"removeComments": true,
-    "baseUrl": "./src", /* This is where all your code is*/
+		"baseUrl": "./src", /* This is where all your code is*/
 		"resolveJsonModule": true,
 		"sourceMap": false,
 		"target": "es2017",
-    "paths": {
-      "src/*": [ "./*" ],
-      "icg/*": [ "./modules/icg/*" ]
-    }
+		"paths": {
+			"src/*": [
+				"./*"
+			],
+			"icg/*": [
+				"./modules/icg/*"
+			],
+			"config/*": [
+				"../config/*"
+			]
+		}
 	},
-  "include": [ "./src/**/*" ]
+	"include": [
+		"./src/**/*"
+	]
 }

@@ -1,6 +1,9 @@
 node_modules
 .env
 build
+bin
+config/*
+!config/config.example.ts
 
 # temporarily ignore
 **/*-beta.ts

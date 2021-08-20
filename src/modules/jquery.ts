@@ -1,7 +1,5 @@
-import { JSDOM } from 'jsdom'
-import jquery from 'jquery'
+import jQuery from 'jquery';
+import { JSDOM } from 'jsdom';
+import config from 'src/util/config';
 
-const win = new ( JSDOM )( '' ).window;
-
-const $: typeof jquery = jquery( win, true )
-export default $;
+export default jQuery( Object.assign( new JSDOM( '', { url: config.afc.mwn.apiUrl || 'about:blank' } ).window ), true );
