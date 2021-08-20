@@ -4,6 +4,7 @@ build
 bin
 config/*
 !config/config.example.ts
+!config/type.d.ts
 
 # temporarily ignore
 **/*-beta.ts
